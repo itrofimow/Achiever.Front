@@ -33,6 +33,7 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SelectedCategoryViewModel> (
+      onInit: (store) => SelectedCategoryViewModel.fromStore(store, widget._categoryId).fetchByCategoryFunc(),
       converter: (store) => SelectedCategoryViewModel.fromStore(store, widget._categoryId),
       builder: (context, viewModel) => _buildLayout(context, viewModel),
     );

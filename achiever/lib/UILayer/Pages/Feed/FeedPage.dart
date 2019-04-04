@@ -14,6 +14,7 @@ import 'package:achiever/DALayer/ApiClient.dart';
 
 import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
+import 'dart:async';
 
 class FeedPage extends StatelessWidget {
   
@@ -21,8 +22,9 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, FeedViewModel>(
         onInit: (store) {
+          final completer = Completer<Null>();
           store.dispatch(ResetFeedAction());
-          store.dispatch(fetchNewFeedPage);
+          store.dispatch(fetchNewFeedPage(completer));
         },
         converter: (store) => FeedViewModel.fromStore(store),
         builder: (context, viewModel) => _buildLayout(context, viewModel)
