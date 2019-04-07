@@ -106,7 +106,7 @@ class SearchResultPageState extends State<SearchResultPage> {
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}')
             ),
-            onTap: () => Keys.navigatorKey.currentState.push(MaterialPageRoute(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => SelectedAchievementPage(x.id))),
           ),
         )

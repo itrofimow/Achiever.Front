@@ -40,11 +40,11 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
   }
 
   Widget _buildLayout(BuildContext context, SelectedCategoryViewModel viewModel) {
-    return Scaffold(
+    return /*Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      body: RefreshIndicator(
+      body: */RefreshIndicator(
         onRefresh: () => viewModel.fetchByCategoryFunc(),
         child: Container(
           //margin: EdgeInsets.only(top: 50),
@@ -58,20 +58,16 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
             ]
           ),
         ),
-      ),
-      bottomNavigationBar: AchieverNavigationBar(
-        currentIndex: 1,
-        profileImagePath: 'default.png',
-        onTap: (index) => {},
-      ),
+      //)
     );
   }
 
   Widget _buildHeader(BuildContext context, SelectedCategoryViewModel viewModel) {
     final editButton = AchieverSecondaryButton(
       text: 'Добавить',
-      onTap: () => Keys.navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (_) => AchievementCreationPage())),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => AchievementCreationPage(),
+          settings: RouteSettings(name: 'createAchievement'))),
     );
     
     return Container(
@@ -79,9 +75,9 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('Игры', style: TextStyle(
+          Text(viewModel.name, style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 40,
+            fontSize: 20,
             color: Color.fromARGB(255, 51, 51, 51),
             letterSpacing: 0.11
           ),),
@@ -154,8 +150,9 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}')
             ),
-            onTap: () => Keys.navigatorKey.currentState.push(MaterialPageRoute(
-              builder: (_) => SelectedAchievementPage(x.id))),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => SelectedAchievementPage(x.id), 
+              settings: RouteSettings(name: 'selectedAchievement'))),
           ),
         );
       }).toList()

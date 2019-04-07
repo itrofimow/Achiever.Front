@@ -4,6 +4,7 @@ import 'User/UserReducer.dart';
 import 'User/Draft/DraftReducer.dart';
 import 'Achievements/AllAchievementsReducer.dart';
 import 'Feed/FeedReducer.dart';
+import 'Navigation/NavigationReducer.dart';
 import 'User/UserActions.dart';
 
 AppState appReducer(AppState state, dynamic action) {
@@ -14,6 +15,7 @@ AppState appReducer(AppState state, dynamic action) {
     userState: userReducer(state.userState, action),
     draftState: draftReducer(state.draftState, action),
     allAchievementsState: allAchievementsReducer(state.allAchievementsState, action),
-    feedState: feedReducer(state.feedState, action)
+    feedState: feedReducer(state.feedState, action),
+    navigationState: navigationReducer(state.navigationState, action),
   );
 }

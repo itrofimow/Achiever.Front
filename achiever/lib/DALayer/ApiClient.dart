@@ -6,7 +6,7 @@ import 'package:achiever/BLLayer/Models/AchieverJsonable.dart';
 class ApiClient {
   static final ApiClient _instance = new ApiClient._internal();
 
-  static const String baseUrl = 'https://achiever.gg/';
+  static const String baseUrl = 'https://achiever.gg/';//'http://192.168.43.192:1337/';
   static final String staticUrl = baseUrl + 'images';
 
   Dio _client;
@@ -85,7 +85,12 @@ class ApiClient {
       //connectTimeout: 1000,
     );
 
-    _client = Dio(options);
+
+
+    print('Created Api Client');
+    _client = Dio(options)..onHttpClientCreate = (client) {
+      print('HttpClient Created');
+    };
 
     _client.interceptor.request.onSend = (Options options) {
       if (_token != null) {

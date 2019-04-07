@@ -13,6 +13,9 @@ import '../User/Draft/DraftActions.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
 import '../Feed/FeedActions.dart';
 
+import 'package:flutter/material.dart';
+import 'package:achiever/UILayer/Main/MainAppPage.dart';
+
 ThunkAction<AppState> validateLoginAction = (Store<AppState> store) async {
   final loginModel = Login(
     store.state.loginState.nickname,
@@ -33,7 +36,10 @@ ThunkAction<AppState> validateLoginAction = (Store<AppState> store) async {
   store.dispatch(UpdateLoadingStatusAction(LoadingStatus.success));
   store.dispatch(ResetFeedAction());
 
-  Keys.navigatorKey.currentState.pushReplacementNamed('/feed');
+  Keys.baseNavigatorKey.currentState.pushReplacement(
+    MaterialPageRoute(
+      builder: (_) => MainAppPage()
+    ));
 };
 
 class UpdateNicknameAction {

@@ -25,25 +25,21 @@ class AchievementCategoriesPage extends StatelessWidget {
   }
 
   Widget _buildCategoriesLayout(BuildContext context, AchievementCategoriesViewModel viewModel) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () => viewModel.fetchAll(),
-        child: Container(
-          margin: EdgeInsets.only(top: 52, left: 16, right: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildHeader(context, viewModel),
-              Expanded(
-                child: _buildCategoriesList(context, viewModel)
-              )
-            ],
-          ),
+    return RefreshIndicator(
+      onRefresh: () => viewModel.fetchAll(),
+      child: Container(
+        margin: EdgeInsets.only(top: 52, left: 16, right: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildHeader(context, viewModel),
+            Expanded(
+              child: _buildCategoriesList(context, viewModel)
+            )
+          ],
         ),
       ),
-      bottomNavigationBar: AchieverNavigationBar(
-        currentIndex: 1, profileImagePath: viewModel.userProfileImagePath, onTap: (_) => {},),
     );
   }
 

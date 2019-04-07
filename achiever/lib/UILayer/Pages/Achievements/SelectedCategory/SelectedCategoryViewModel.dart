@@ -9,6 +9,7 @@ class SelectedCategoryViewModel {
   final String categoryId;
   final List<Achievement> allAchievements;
   final List<Achievement> myAchievements;
+  final String name;
 
   final Function fetchByCategoryFunc;
 
@@ -16,6 +17,7 @@ class SelectedCategoryViewModel {
     this.categoryId,
     this.allAchievements,
     this.myAchievements,
+    this.name,
     this.fetchByCategoryFunc
   });
   
@@ -29,6 +31,7 @@ class SelectedCategoryViewModel {
       categoryId: categoryId,
       allAchievements: achievementsByCategory.all,
       myAchievements: achievementsByCategory.my,
+      name: state.achievementCategories.singleWhere((x) => x.id == categoryId).title,
       fetchByCategoryFunc: () {
         final completer = Completer<Null>();
         store.dispatch(fetchByCategory(categoryId, completer));

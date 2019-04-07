@@ -4,6 +4,7 @@ import 'User/UserState.dart';
 import 'User/Draft/DraftState.dart';
 import 'Achievements/AllAchievementsState.dart';
 import 'Feed/FeedState.dart';
+import 'Navigation/NavigationState.dart';
 
 @immutable
 class AppState {
@@ -12,13 +13,15 @@ class AppState {
   final DraftState draftState;
   final AllAchievementsState allAchievementsState;
   final FeedState feedState;
+  final NavigationState navigationState;
 
   AppState({
     @required this.loginState,
     @required this.userState,
     @required this.draftState,
     @required this.allAchievementsState,
-    @required this.feedState
+    @required this.feedState,
+    @required this.navigationState
   });
 
   factory AppState.initial() {
@@ -27,7 +30,8 @@ class AppState {
       userState: UserState.initial(),
       draftState: DraftState.initial(),
       allAchievementsState: AllAchievementsState.initial(),
-      feedState: FeedState.initial()
+      feedState: FeedState.initial(),
+      navigationState: NavigationState.initial()
     );
   }
 
@@ -36,14 +40,16 @@ class AppState {
     UserState userState,
     DraftState draftState,
     AllAchievementsState allAchievementsState,
-    FeedState feedState
+    FeedState feedState,
+    NavigationState navigationState
   }) {
     return AppState(
       loginState: loginState ?? this.loginState,
       userState: userState ?? this.userState,
       draftState: draftState ?? this.draftState,
       allAchievementsState: allAchievementsState ?? this.allAchievementsState,
-      feedState: feedState ?? this.feedState
+      feedState: feedState ?? this.feedState,
+      navigationState: navigationState ?? this.navigationState
     );
   }
 

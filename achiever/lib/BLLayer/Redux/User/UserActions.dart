@@ -53,21 +53,6 @@ ThunkAction<AppState> logout = (Store<AppState> store) async {
   store.dispatch(LogoutAction());
 };
 
-ThunkAction<AppState> tryLoadCurrentUserAndRedirect = (Store<AppState> store) async {
-  final token = await AppContainer.sharedPrefsService.getToken();
-  new ApiClient().setToken(token);
-
-  try {
-    final user = await AppContainer.userApi.getCurrentUser();
-    store.dispatch(UpdateUserAction(user));
-    store.dispatch(UpdateTokenAction(token));
-
-    Keys.navigatorKey.currentState.pushReplacementNamed('/feed');
-  } catch (e) {
-    Keys.navigatorKey.currentState.pushReplacementNamed('/welcome');
-  }
-};
-
 ThunkAction<AppState> followAndReload(String id) {
   return (Store<AppState> store) async {
     await AppContainer.socialIntercationsApi.follow(id);

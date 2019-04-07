@@ -49,23 +49,15 @@ class MyProfilePageState extends State<MyProfilePage> {
       leading: Container(),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: ScrollWithoutGlow(
-        child: ListView(
-          children: <Widget>[
-            _buildFitted(context, _buildHeader(context, viewModel)),
-            _buildFitted(context, _buildAbout(context, viewModel)),
-            _buildFitted(context, _buildStats(context, viewModel)),
-            _buildDivider(context)
-          ],
-        )
-      ),
-      bottomNavigationBar: AchieverNavigationBar(
-        currentIndex: 4,
-        profileImagePath: viewModel.user.profileImagePath,
-        onTap: (index) => {},
-      ),
+    return ScrollWithoutGlow(
+      child: ListView(
+        children: <Widget>[
+          _buildFitted(context, _buildHeader(context, viewModel)),
+          _buildFitted(context, _buildAbout(context, viewModel)),
+          _buildFitted(context, _buildStats(context, viewModel)),
+          _buildDivider(context)
+        ],
+      )
     );
   }
 
@@ -111,8 +103,10 @@ class MyProfilePageState extends State<MyProfilePage> {
           ),
         ),
       ),
-      onTap: () => Keys.navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (_) => EditProfilePage(viewModel.user))),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => EditProfilePage(viewModel.user), settings: RouteSettings(
+            name: 'editProfile'
+          ))),
     );
 
     final settingsButton = Container(

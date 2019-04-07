@@ -20,6 +20,7 @@ import 'package:achiever/UILayer/Pages/Entrance/WelcomePage.dart';
 import 'package:achiever/UILayer/Pages/Feed/FeedPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'DALayer/ApiClient.dart';
+import 'package:achiever/UILayer/Main/MainAppPage.dart';
 
 import 'UILayer/UIKit/ScrollWithoutGlow.dart';
 
@@ -86,8 +87,8 @@ class _AppState extends State<MyApp> {
           scaffoldBackgroundColor: Colors.white
         ),
         //home: new MyHomePage(title: 'Flutter Demo Home Page'),
-        navigatorKey: Keys.navigatorKey,
-        home: DebugRoutingPage(),//widget.goToFeed ? new FeedPage() : new WelcomePage(),//DebugRoutingPage(),
+        navigatorKey: Keys.baseNavigatorKey,
+        home: widget.goToFeed ? MainAppPage() : new WelcomePage(),//DebugRoutingPage(),
         routes: routes,
       )
     );

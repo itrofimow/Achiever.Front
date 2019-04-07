@@ -56,9 +56,9 @@ class DebugRoutingPageState extends State<DebugRoutingPage> {
 				padding: EdgeInsets.only(top: 100.0),
 				child: new ListView(
 					children: <Widget>[
+            createButton('/main', context),
             createButton('/test', context),
             createButton('/achievementCategories', context),
-            createButton('/splash', context),
             createButton('/notifications', context),
             createButton('/allUsers', context),
             createButton('/allAchievements', context),

@@ -34,20 +34,10 @@ class FeedPage extends StatelessWidget {
   Widget _buildLayout(BuildContext context, FeedViewModel viewModel) {
     final _navigateFunc = (BuildContext innerContext, FeedEntryResponse innerModel) =>
       Navigator.of(innerContext).push(MaterialPageRoute(
-        builder: (context) => FeedEntryPage(innerModel.entry.id)));
+        builder: (context) => FeedEntryPage(innerModel.entry.id),
+        settings: RouteSettings(name: 'feedEntry')));
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: new Text('Feed me pls'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        onPressed: () => viewModel.getNew(),
-      ),
-			body: RefreshIndicator(
+    return RefreshIndicator(
         onRefresh: () {
           return viewModel.resetFeed();
         },
@@ -58,22 +48,7 @@ class FeedPage extends StatelessWidget {
               viewModel.likeOrUnlikeCallback, _navigateFunc,
               viewModel.userId);
           }).toList(),
-        )
-      ),
-      bottomNavigationBar: AchieverNavigationBar(
-        currentIndex: 0,
-        profileImagePath: viewModel.userProfileImage,
-        onTap: (index) {
-          if (index == 1)
-            Keys.navigatorKey.currentState.pushNamed('/allAchievements');
-          if (index == 2)
-            Keys.navigatorKey.currentState.pushNamed('/allAchievements');
-          if (index == 3)
-            Keys.navigatorKey.currentState.pushNamed('/notifications');
-          if (index == 4)
-            Keys.navigatorKey.currentState.pushNamed('/myProfile');
-        },
-      ),
+      )
     );
   }
 }
