@@ -16,6 +16,7 @@ FeedEntry _$FeedEntryFromJson(Map<String, dynamic> json) {
           : new Achievement.fromJson(
               json['achievement'] as Map<String, dynamic>),
       json['comment'] as String,
+      json['when'] as String,
       (json['images'] as List)?.map((e) => e as String)?.toList(),
       (json['likes'] as List)?.map((e) => e as String)?.toList(),
       json['likesCount'] as int,
@@ -34,6 +35,7 @@ abstract class _$FeedEntrySerializerMixin {
   Achievement get achievement;
   String get comment;
   List<String> get images;
+  String get when;
   List<String> get likes;
   int get likesCount;
   List<FeedEntryComment> get comments;
@@ -45,6 +47,7 @@ abstract class _$FeedEntrySerializerMixin {
         'achievement': achievement,
         'comment': comment,
         'images': images,
+        'when': when,
         'likes': likes,
         'likesCount': likesCount,
         'comments': comments,

@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
 import '../SelectedCategory/SelectedCategoryPage.dart';
 import 'SearchResultPage.dart';
+import 'package:achiever/DALayer/ApiClient.dart';
 
 class AchievementCategoriesPage extends StatelessWidget {
   final _random = new Random();
@@ -28,18 +29,19 @@ class AchievementCategoriesPage extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () => viewModel.fetchAll(),
       child: Container(
-        margin: EdgeInsets.only(top: 52, left: 16, right: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildHeader(context, viewModel),
-            Expanded(
-              child: _buildCategoriesList(context, viewModel)
-            )
-          ],
+        margin: EdgeInsets.only(left: 16, right: 16),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildHeader(context, viewModel),
+              _buildCategoriesList(context, viewModel)
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -52,38 +54,39 @@ class AchievementCategoriesPage extends StatelessWidget {
           color: Color.fromARGB(255, 242, 242, 242),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 6),
-              child: Text('Поиск', style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 17,
-                letterSpacing: -0.41,
-                color: Color.fromRGBO(51, 51, 51, 0.7),
-                height: 14.0 / 12
-              )),
-            ),
-            Container(
-              margin: EdgeInsets.only(right: 16),
+              margin: EdgeInsets.only(left: 12),
               child: Opacity(
                 opacity: 0.5,
                 child: Icon(Icons.search),
               )
-            )
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 12),
+              child: Text('Достижения, люди', style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 17,
+                letterSpacing: -0.41,
+                color: Color.fromRGBO(51, 51, 51, 0.5),
+                height: 22.0 / 17
+              )),
+            ),
           ],
         ),
       ),
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => SearchResultPage())),
+        MaterialPageRoute(builder: (_) => SearchResultPage(), 
+        settings: RouteSettings(name: 'searchResult'))),
     );
 
     final bigTitle = Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 24),
       child: Text('Достижения', style: TextStyle(
-        fontWeight: FontWeight.w900,
-        fontSize: 40,
-        letterSpacing: 0.11,
+        fontWeight: FontWeight.w700,
+        fontSize: 24,
+        letterSpacing: 0.29,
         color: Color.fromARGB(255, 51, 51, 51)
       ),),
     );
@@ -119,50 +122,61 @@ class AchievementCategoriesPage extends StatelessWidget {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
-      child: ScrollConfiguration(
-        behavior: NoScrollGlowBehavior(),
-        child: ListView(
+        child: Column(
           children: list
         )
-      )
     );
   }
 
   Widget _buildCategory(BuildContext context, AchievementCategory category) {
-    final List colors = [Colors.red, Colors.green, Colors.yellow, 
-      Colors.purple, Colors.red, Colors.pink];
+    final List urls = [
+      'games_category.png',
+      'films_category.png',
+      'books_category.png',
+      'travel_category.png'
+    ];
 
     final image = Container(
-      width: 40,
-      height: 40,
-      margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-      decoration: BoxDecoration(
+      width: 88,
+      height: 88,
+      margin: EdgeInsets.only(left: 16),
+      /*decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: colors[_random.nextInt(colors.length)],
-      ),
+      ),*/
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
+        child: OverflowBox(
+          alignment: Alignment.centerLeft,
+          minWidth: 112,
+          maxWidth: 112,
+            child: Image.network('${ApiClient.staticUrl}/uploads/${urls[_random.nextInt(urls.length)]}',
+            fit: BoxFit.fitWidth,),
+        )
+      )
     );
 
     final titleAndSubtitle = Container(
-      margin: EdgeInsets.only(top: 18, left: 16, bottom: 20),
+      margin: EdgeInsets.only(top: 22, left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(category.title, style: TextStyle(
             fontWeight: FontWeight.w700,
-            fontSize: 24,
-            letterSpacing: 0.29,
+            fontSize: 14,
+            letterSpacing: 0.24,
             color: Color.fromRGBO(51, 51, 51, 1),
             //height: 28.0 / 24
           ),),
           Container(
-            margin: EdgeInsets.only(top: 2),
+            margin: EdgeInsets.only(top: 4),
             child: Text(category.subtitle, style: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: 14,
-              letterSpacing: 0.24,
+              fontSize: 12,
+              letterSpacing: 0.21,
               color: Color.fromRGBO(51, 51, 51, 0.5),
-              height: 20.0 / 14
+              height: 20.0 / 12
             ),)
           )
         ],
@@ -170,7 +184,8 @@ class AchievementCategoriesPage extends StatelessWidget {
     );
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      height: 88,
+      margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 242, 242, 242)
@@ -185,7 +200,8 @@ class AchievementCategoriesPage extends StatelessWidget {
           ],
         ),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SelectedCategoryPage(category.id))),
+          builder: (context) => SelectedCategoryPage(category.id),
+          settings: RouteSettings(name: 'selectedCategory'))),
       )
     );
   }

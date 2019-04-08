@@ -80,8 +80,10 @@ class MainAppViewModel {
   }
 
   static Widget _buildAppBar(String currentRoute) {
+    if (currentRoute == 'selectedAchievement') return null;
+
     if (currentRoute == 'editProfile') return null;
-    
+
     return AppBar(title: Text(currentRoute), backgroundColor: Colors.white,
     elevation: 0,);
   }

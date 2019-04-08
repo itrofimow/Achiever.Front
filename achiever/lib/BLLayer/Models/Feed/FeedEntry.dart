@@ -13,6 +13,8 @@ class FeedEntry extends Object with _$FeedEntrySerializerMixin {
   final String comment;
   final List<String> images;
 
+  final String when;
+
   final List<String> likes;
   int likesCount;
 
@@ -20,7 +22,7 @@ class FeedEntry extends Object with _$FeedEntrySerializerMixin {
   int commentsCount;
 
   FeedEntry(this.id, this.authorId, this.achievementId,
-   this.achievement, this.comment, this.images, this.likes, this.likesCount,
+   this.achievement, this.comment, this.when, this.images, this.likes, this.likesCount,
    this.comments, this.commentsCount);
 
   factory FeedEntry.fromJson(Map<String, dynamic> json) => _$FeedEntryFromJson(json);
@@ -28,7 +30,7 @@ class FeedEntry extends Object with _$FeedEntrySerializerMixin {
   static FeedEntry copy(FeedEntry entry) {
     return FeedEntry(
       entry.id, entry.authorId, entry.achievementId, entry.achievement,
-      entry.comment, entry.images, entry.likes, entry.likesCount,
+      entry.comment, entry.when, entry.images, entry.likes, entry.likesCount,
       entry.comments, entry.commentsCount
     );
   }

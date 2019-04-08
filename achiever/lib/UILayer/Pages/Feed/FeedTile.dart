@@ -34,11 +34,13 @@ class FeedTile extends StatelessWidget {
 
     if (model.entry.authorId == userId)
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MyProfilePage()
+        builder: (context) => MyProfilePage(),
+        settings: RouteSettings(name: 'profile')
       ));
     else
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => TheirProfilePage(model.entry.authorId)
+        builder: (context) => TheirProfilePage(model.entry.authorId),
+        settings: RouteSettings(name: 'their profile')
       ));
   }
 
@@ -65,7 +67,7 @@ class FeedTile extends StatelessWidget {
 
     final whenBox = new Container(
       //margin: EdgeInsets.only(right: 16.0),
-      child: new Text('just now', style: TextStyle(
+      child: new Text(model.entry.when, style: TextStyle(
         color: Color.fromARGB(255, 153, 153, 153),
         fontSize: 12.0,
         letterSpacing: 0.21,

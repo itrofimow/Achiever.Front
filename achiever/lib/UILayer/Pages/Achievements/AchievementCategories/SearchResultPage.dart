@@ -37,9 +37,8 @@ class SearchResultPageState extends State<SearchResultPage> {
   }
 
   Widget _buildLayout(BuildContext context, AchievementCategoriesViewModel viewModel) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.only(top: 52, left: 16, right: 16),
+    return Container(
+        margin: EdgeInsets.only(left: 16, right: 16),
         child:  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,10 +57,6 @@ class SearchResultPageState extends State<SearchResultPage> {
             ))
           ]
         )
-      ),
-      bottomNavigationBar: AchieverNavigationBar(
-        currentIndex: 1, profileImagePath: viewModel.userProfileImagePath, onTap: (_) => {},
-      ),
     );
   }
 

@@ -39,7 +39,8 @@ class AllAchievementsPage extends StatelessWidget {
             children: viewModel.allAchievements.map((x) {
               return new GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EntryCreationPage(x.id))),
+                  builder: (context) => EntryCreationPage(x.id), 
+                  settings: RouteSettings(name: 'entryCreation'))),
                 child: new Container(
                   //decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 1.0)),
                   margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 25.0, bottom: 25.0),
