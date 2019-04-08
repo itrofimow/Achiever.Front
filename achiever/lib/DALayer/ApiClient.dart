@@ -82,14 +82,10 @@ class ApiClient {
   ApiClient._internal() {
     final options = Options(
       baseUrl: baseUrl + 'api',
-      //connectTimeout: 1000,
     );
 
-
-
-    print('Created Api Client');
     _client = Dio(options)..onHttpClientCreate = (client) {
-      print('HttpClient Created');
+      client.idleTimeout = Duration(minutes: 10);
     };
 
     _client.interceptor.request.onSend = (Options options) {
