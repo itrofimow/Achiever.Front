@@ -21,6 +21,7 @@ import 'package:achiever/UILayer/Pages/Feed/FeedPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'DALayer/ApiClient.dart';
 import 'package:achiever/UILayer/Main/MainAppPage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'UILayer/UIKit/ScrollWithoutGlow.dart';
 
@@ -29,7 +30,7 @@ Future<bool> _shouldGoToFeed(Store<AppState> store) async {
   new ApiClient().setToken(token);
 
   try {
-    final user = await AppContainer.userApi.getCurrentUser().timeout(Duration(seconds: 1));
+    final user = await AppContainer.userApi.getCurrentUser().timeout(Duration(seconds: 3));
     store.dispatch(UpdateUserAction(user));
     store.dispatch(UpdateTokenAction(token));
 
@@ -46,7 +47,7 @@ void main() async {
 	await SystemChrome.setPreferredOrientations(
 		[DeviceOrientation.portraitUp]);
 
-  await FirebaseInitializer.Init(store);
+  //await FirebaseInitializer.Init(store);
 
   final goToFeed = await _shouldGoToFeed(store);
 
@@ -64,6 +65,35 @@ class MyApp extends StatefulWidget {
 } 
 
 class _AppState extends State<MyApp> {
+  final _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+
+     _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+
+    _firebaseMessaging.getToken().then((token){
+      if (token != null)
+        widget.store.dispatch(UpdateFirebaseTokenAction(token));
+    });
+  }
   
   // This widget is the root of your application.
   @override
