@@ -3,11 +3,28 @@ import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import '../Images/AchieverProfileImage.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:achiever/AppContainer.dart';
 
-class UserTile extends StatelessWidget {
+class UserTile extends StatefulWidget {
   final UserDto user;
 
   UserTile(this.user);
+
+  @override
+  UserTileState createState() => UserTileState(user);
+}
+
+class UserTileState extends State<UserTile> {
+  final UserDto user;
+
+  bool following;
+  bool isLoading = false;
+
+  UserTileState(this.user) {
+    following = user.following;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +73,33 @@ class UserTile extends StatelessWidget {
     return Container(
       width: 36,
       height: 36,
-      child: Image.asset(
-        user.following ? 'assets/following_icon.png' : 'assets/follow_icon.png', 
-        width: 36, height: 36,),
+      child: isLoading ? Center(
+        widthFactor: 0.9,
+        child: CircularProgressIndicator(),
+      ) : GestureDetector(
+        child: Image.asset(
+          following ? 'assets/following_icon.png' : 'assets/follow_icon.png', 
+          width: 36, height: 36),
+        onTap: () {
+          followOrUnfollow();
+        },
+      )
     );
+  }
+
+  Future followOrUnfollow() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    if (following)
+      await AppContainer.socialIntercationsApi.unfollow(user.user.id);
+    else
+      await AppContainer.socialIntercationsApi.follow(user.user.id);
+
+    setState(() {
+      following ^= true;
+      isLoading = false;      
+    });
   }
 }

@@ -75,10 +75,6 @@ class ApiClient {
     return toModel(response.data);
   }
 
-  Map<String, dynamic> _decodeJson(String data) {
-    return json.decode(data);
-  }
-
   ApiClient._internal() {
     final options = Options(
       baseUrl: baseUrl + 'api',

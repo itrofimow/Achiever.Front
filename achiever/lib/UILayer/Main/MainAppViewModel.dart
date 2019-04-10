@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import '../Pages/Feed/FeedPage.dart';
 import '../Pages/Achievements/AchievementCategories/AchievementCategoriesPage.dart';
 import '../Pages/Achievements/AllAchievementsPage.dart';
-import '../Pages/Notifications/MyNotificationsPage.dart';
+import '../Pages/Notifications/NotificationsPage.dart';
 import '../Pages/Profile/MyProfile/MyProfilePage.dart';
 
 
@@ -16,7 +16,7 @@ final mainAppRoutes = {
   'feed': (BuildContext context) => FeedPage(),
   'search': (BuildContext context) => AchievementCategoriesPage(),
   'add': (BuildContext context) => AllAchievementsPage(),
-  'notifications': (BuildContext context) => MyNotificationsPage(),
+  'notifications': (BuildContext context) => NotificationsPage(),
   'profile': (BuildContext context) => MyProfilePage()
 };
 

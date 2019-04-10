@@ -10,7 +10,9 @@ import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'package:achiever/UILayer/Pages/Achievements/AchievementCreationPage.dart';
 import 'package:achiever/UILayer/UIKit/Buttons/AchieverSecondaryButton.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
+import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import '../SelectedAchievement/SelectedAchievementPage.dart';
+import 'package:achiever/UILayer/UIKit/Buttons/AchieverButton.dart';
 
 class SelectedCategoryPage extends StatefulWidget {
   final String _categoryId;
@@ -54,7 +56,9 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
               _buildDivider(context),
               _buildFitted(context, _buildTopNavigation(context)),
               Container(height: 1, color: Color.fromARGB(255, 242, 242, 242),),
-              Expanded(child: _buildFitted(context, _buildList(context, viewModel)))
+                _topNavState == _TopNavigationState.all 
+                ? _buildAllAchievementsList(context, viewModel)
+                : _buildMyAchievementsList(context, viewModel)
             ]
           ),
         ),
@@ -139,9 +143,9 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
     );
   }
 
-  Widget _buildList(BuildContext context, SelectedCategoryViewModel viewModel) {
+  Widget _buildList(BuildContext context, List<Achievement> achievements) {
     return ListView(
-      children: (_topNavState == _TopNavigationState.all ? viewModel.allAchievements : viewModel.myAchievements).map((x) {
+      children: achievements.map((x) {
         return Container(
           margin: EdgeInsets.only(top: 20),
           child: GestureDetector(
@@ -157,6 +161,53 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
         );
       }).toList()
     );
+  }
+
+  Widget _buildAllAchievementsList(BuildContext context, SelectedCategoryViewModel viewModel) {
+    return Expanded(child: _buildFitted(context, _buildList(context, viewModel.allAchievements)));
+  }
+
+  Widget _buildMyAchievementsList(BuildContext context, SelectedCategoryViewModel viewModel) {
+    if (viewModel.myAchievements.length > 0)
+      return Expanded(child: _buildFitted(context, _buildList(context, viewModel.myAchievements)));
+
+    final content = Container(
+      margin: EdgeInsets.only(top: 53),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 130,
+            height: 140,
+            //color: Colors.black,
+            child: Image.asset('assets/achiever_logo.png', 
+              color: Color.fromRGBO(51, 51, 51, 1), 
+              colorBlendMode: BlendMode.srcIn,),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 25),
+            child: Text('В этой категории пока нет\nполученных достижений.\nНайдите то, что вам по душе!', style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 17,
+              color: Color.fromRGBO(51, 51, 51, 1),
+              letterSpacing: -0.41
+            ), textAlign: TextAlign.center,),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 32),
+            child: AchieverButton.createDefault(Text('Все достижения в категории', style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: Colors.white,
+              letterSpacing: 0.26
+            )), () => setState((){
+              _topNavState = _TopNavigationState.all;
+            })),
+          )
+        ],
+      ),
+    );
+
+    return _buildFitted(context, content);
   }
 
   Widget _buildFitted(BuildContext context, Widget body) {

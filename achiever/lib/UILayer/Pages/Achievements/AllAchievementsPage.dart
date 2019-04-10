@@ -7,24 +7,19 @@ import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/BLLayer/Redux/Achievements/AllAchievementsActions.dart';
+import 'dart:async';
 
 class AllAchievementsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        onPressed: () => Navigator.of(context).pushNamed('/createAchievement'),
-      ),
-      body: StoreConnector<AppState, AllAchievementsViewModel>(
+    return StoreConnector<AppState, AllAchievementsViewModel>(
         onInit: (store) {
-          store.dispatch(fetchAllAchievementsAction);
+          final completer = Completer<Null>();
+          store.dispatch(fetchAllAchievementsAction(completer));
         },
         converter: (store) => AllAchievementsViewModel.fromStore(store),
         builder: (context, viewModel) => _buildLayout(context, viewModel)
-      )
     );
   }
 

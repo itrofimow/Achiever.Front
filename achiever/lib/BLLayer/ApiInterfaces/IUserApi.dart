@@ -10,4 +10,6 @@ abstract class IUserApi {
   Future<User> update(User model, File image);
 
   Future<List<AchieverNotification>> getNotifications();
+
+  Future<int> countFeedEntries(String userId);
 }

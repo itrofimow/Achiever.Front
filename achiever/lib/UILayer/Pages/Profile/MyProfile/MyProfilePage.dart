@@ -18,6 +18,9 @@ import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'package:quiver/strings.dart';
 
 import 'package:achiever/UILayer/UIKit/ScrollWithoutGlow.dart';
+import 'SettingsPage.dart';
+
+import 'package:achiever/AppContainer.dart';
 
 class MyProfilePage extends StatefulWidget {
 
@@ -26,37 +29,41 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
+  bool loadingEntriesCount = true;
+  int entriesCount = 0;
+
+  Future fetchEntriesCount(String userId) async {
+    final count = await AppContainer.userApi.countFeedEntries(userId);
+
+    setState(() {
+      loadingEntriesCount = false;
+      entriesCount = count;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MyProfileViewModel>(
+      onInit: (store) {
+        fetchEntriesCount(MyProfileViewModel.fromStore(store).user.id);
+      },
       converter: (store) => MyProfileViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel)
     );
   }
 
   Widget _buildLayout(BuildContext context, MyProfileViewModel viewModel) {
-    final appBar = AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      title: Text('Мой профиль', style: TextStyle(
-        fontSize: 21,
-        letterSpacing: 0.34,
-        color: Color.fromARGB(255, 51, 51, 51),
-        fontWeight: FontWeight.w700
-      ),),
-      elevation: 0,
-      leading: Container(),
-    );
-
     return ScrollWithoutGlow(
-      child: ListView(
-        children: <Widget>[
-          _buildFitted(context, _buildHeader(context, viewModel)),
-          _buildFitted(context, _buildAbout(context, viewModel)),
-          _buildFitted(context, _buildStats(context, viewModel)),
-          _buildDivider(context)
-        ],
+      child: RefreshIndicator(
+        onRefresh: () => fetchEntriesCount(viewModel.user.id),
+        child: ListView(
+          children: <Widget>[
+            _buildFitted(context, _buildHeader(context, viewModel)),
+            _buildFitted(context, _buildAbout(context, viewModel)),
+            _buildFitted(context, _buildStats(context, viewModel)),
+            _buildDivider(context)
+          ],
+        )
       )
     );
   }
@@ -103,16 +110,21 @@ class MyProfilePageState extends State<MyProfilePage> {
           ),
         ),
       ),
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
           builder: (_) => EditProfilePage(viewModel.user), settings: RouteSettings(
             name: 'editProfile'
           ))),
     );
 
-    final settingsButton = Container(
-      height: 36,
-      width: 36,
-      child: Image.asset('assets/settings_icon.png', width: 36, height: 36),
+    final settingsButton = GestureDetector(
+      child: Container(
+        height: 36,
+        width: 36,
+        child: Image.asset('assets/settings_icon.png', width: 36, height: 36),
+      ),
+      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+        builder: (_) => SettingsPage()
+      )),
     );
 
     return Container(
@@ -188,7 +200,7 @@ class MyProfilePageState extends State<MyProfilePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildStatsBlock(context, 25, 'Записей'),
+          _buildStatsBlock(context, loadingEntriesCount ? 0 : entriesCount, 'Записей'),
           Container(
             margin: EdgeInsets.only(left: 36),
             child: _buildStatsBlock(context, viewModel.user.stats.followers, 'Подписчиков'),

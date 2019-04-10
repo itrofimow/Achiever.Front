@@ -49,15 +49,8 @@ class FeedEntryPage extends StatelessWidget {
     );
     columnChildren.add(inputBox);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: new Text('FeedEntry Page'),
-      ),
-      body: ListView(
-        children: columnChildren,
-      )
+    return ListView(
+      children: columnChildren,
     );
   }
 

@@ -99,25 +99,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget _buildLayout(BuildContext context, Store<AppState> store) {
-    return Container(
-      margin: EdgeInsets.only(left: 16, right: 16),
-      child: ListView(
-        children: <Widget>[
-          _buildAppBar(context, store),
-          _buildImageBlock(context),
-          _buildInfoBlock(context)
-        ],
+    return Scaffold(
+      appBar: _buildAppBar(context, store),
+      body: Container(
+        margin: EdgeInsets.only(left: 16, right: 16),
+        child: ListView(
+          children: <Widget>[
+            _buildImageBlock(context),
+            _buildInfoBlock(context)
+          ],
+        )
       )
     );
   }
 
   Widget _buildAppBar(BuildContext context, Store<AppState> store) {
-    return Container(
-      margin: EdgeInsets.only(top: 24, bottom: 24),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.3)))
-      ),
-      child: Row(
+    return AppBar(
+      backgroundColor: Colors.white,
+      centerTitle: true,
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
@@ -154,6 +154,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ]
       ),
+      elevation: 0,
+      automaticallyImplyLeading: false,
     );
   }
 

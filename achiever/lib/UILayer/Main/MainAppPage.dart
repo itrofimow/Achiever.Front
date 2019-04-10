@@ -10,6 +10,8 @@ import 'package:achiever/AppContainer.dart';
 
 class MainAppPage extends StatelessWidget {
 
+  MainAppPage() : super(key : UniqueKey());
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MainAppViewModel> (

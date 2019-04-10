@@ -111,6 +111,7 @@ class WelcomePage extends StatelessWidget {
       margin: EdgeInsets.only(top: 12),
       //decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 1)),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         child: Container(
           height: 40,
           child: Row(

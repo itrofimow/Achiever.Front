@@ -2,6 +2,7 @@ import 'package:achiever/BLLayer/ApiInterfaces/IUserApi.dart';
 import '../ApiClient.dart';
 
 import 'package:achiever/BLLayer/Models/User/User.dart';
+import 'package:achiever/BLLayer/Models/User/FeedEntriesCount.dart';
 import 'package:achiever/BLLayer/Models/Notifications/AchieverNotification.dart';
 import 'package:achiever/BLLayer/Models/Notifications/NotificationsList.dart';
 import 'package:dio/dio.dart';
@@ -50,6 +51,14 @@ class UserApi implements IUserApi {
       (json) => NotificationsList.fromJson(json));
 
     return model.notifications;
+  }
+
+  Future<int> countFeedEntries(String userId) async {
+    final model = await _client.makeGet<FeedEntriesCount>(
+      '/user/countEntries/$userId',
+      (json) => FeedEntriesCount.fromJson(json));
+
+    return model.count;
   }
 
   UserApi._internal() {

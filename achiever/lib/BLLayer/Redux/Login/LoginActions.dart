@@ -36,10 +36,10 @@ ThunkAction<AppState> validateLoginAction = (Store<AppState> store) async {
   store.dispatch(UpdateLoadingStatusAction(LoadingStatus.success));
   store.dispatch(ResetFeedAction());
 
-  Keys.baseNavigatorKey.currentState.pushReplacement(
+  Keys.baseNavigatorKey.currentState.pushAndRemoveUntil(
     MaterialPageRoute(
       builder: (_) => MainAppPage()
-    ));
+    ), (_) => false);
 };
 
 class UpdateNicknameAction {

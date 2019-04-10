@@ -29,23 +29,16 @@ class NotificationsPage extends StatelessWidget {
       listChildren.add(_buildSingleNotification(context, x));
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: new Text('Notifications'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          viewModel.fetchNotifications();
-        },
-        child: Container(
-          margin: EdgeInsets.only(top: 20, left: 16, right: 16),
-          child: ListView(
-            children: listChildren,
-          ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        viewModel.fetchNotifications();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 20, left: 16, right: 16),
+        child: ListView(
+          children: listChildren,
         ),
-      )
+      ),
     );
   }
 
