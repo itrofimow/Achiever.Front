@@ -8,7 +8,7 @@ class FirebaseInitializer {
   static final _firebaseMessaging = FirebaseMessaging();
 
   static Init(Store<AppState> store) async {
-
+    try {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -31,5 +31,9 @@ class FirebaseInitializer {
 
     if (token == null) return;
     store.dispatch(UpdateFirebaseTokenAction(token));
+    }
+    catch (e) {
+      print(e.toString());
+    }
   }
 }
