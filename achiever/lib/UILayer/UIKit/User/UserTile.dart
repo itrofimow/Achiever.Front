@@ -8,7 +8,7 @@ import 'package:achiever/AppContainer.dart';
 class UserTile extends StatefulWidget {
   final UserDto user;
 
-  UserTile(this.user);
+  UserTile(this.user) : super(key: UniqueKey());
 
   @override
   UserTileState createState() => UserTileState(user);
