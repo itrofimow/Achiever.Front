@@ -80,7 +80,7 @@ class UserSmallTile extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(right: 16.0),
-            child: AchieverButton(150, 60, Text(model.following ? 'Unfollow' : 'Follow', 
+            child: AchieverButton(60, Text(model.following ? 'Unfollow' : 'Follow', 
               style: TextStyle(color: Colors.white),), isLocked ? null : (){
                 model.following ? 
                   _unfollow(model.user.id) : 

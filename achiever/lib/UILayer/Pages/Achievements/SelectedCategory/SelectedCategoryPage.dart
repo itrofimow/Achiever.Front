@@ -7,7 +7,7 @@ import 'package:achiever/UILayer/UIKit/Achievement/AchieverAchievement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
-import 'package:achiever/UILayer/Pages/Achievements/AchievementCreationPage.dart';
+import 'package:achiever/UILayer/Pages/Achievements/AchievementCreationPageV2.dart';
 import 'package:achiever/UILayer/UIKit/Buttons/AchieverSecondaryButton.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
@@ -69,8 +69,8 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
   Widget _buildHeader(BuildContext context, SelectedCategoryViewModel viewModel) {
     final editButton = AchieverSecondaryButton(
       text: 'Добавить',
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => AchievementCreationPage(),
+      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+          builder: (_) => AchievementCreationPageV2(viewModel.category),
           settings: RouteSettings(name: 'createAchievement'))),
     );
     
@@ -152,7 +152,8 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
             child: AchieverAchievement(x, 
               MediaQuery.of(context).size.width - 16 * 2,
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}')
+              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}'),
+              key: ValueKey(x.id),
             ),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => SelectedAchievementPage(x.id), 

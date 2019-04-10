@@ -9,8 +9,10 @@ import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/UILayer/UIKit/Images/AchieverProfileImage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:achiever/BLLayer/ApiInterfaces/IAchievementApi.dart';
 
 import 'dart:ui' as ui;
+import 'dart:io';
 import 'dart:async';
 import 'dart:math';
 
@@ -18,8 +20,11 @@ class SelectedAchievementPage extends StatefulWidget {
   //final image = NetworkImage('${ApiClient.staticUrl}/test_image.png');
   //final mask = NetworkImage('${ApiClient.staticUrl}/mask.png');
   final String achievementId;
+  final IAchievementApi achievementApi;
+  final SelectedAchievementViewModel fakedViewModel;
 
-  SelectedAchievementPage(this.achievementId);
+  SelectedAchievementPage(this.achievementId,
+    {Key key, this.achievementApi, this.fakedViewModel}) : super(key: key);
 
   @override
   SelectedAchievementPageState createState() => SelectedAchievementPageState();
@@ -43,13 +48,18 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
   void initState() {
     backgroundWidget = Container();
 
-    AppContainer.achievementApi.getFollowingsWhoHave(widget.achievementId).then((val){
+    final api = widget.achievementApi ?? AppContainer.achievementApi;
+
+    api.getFollowingsWhoHave(widget.achievementId).then((val){
       followingsWhoHave = val;
       if (mounted)
         setState(() {
           
         });
     });
+
+    if (widget.fakedViewModel != null)
+      _initResolve(AppContainer.store, fakedViewModel: widget.fakedViewModel);
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _calculateBackgroundDecoration());
 
@@ -58,22 +68,25 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, SelectedAchievementViewModel>(
-      onInit: (store) => _initResolve(store),
-      converter: (store) => SelectedAchievementViewModel.fromStore(store, widget.achievementId),
-      builder: (context, viewModel) => _buildLayout(context, viewModel),
-    );
+    if (widget.fakedViewModel == null) {
+      return Scaffold(
+        body: StoreConnector<AppState, SelectedAchievementViewModel>(
+          onInit: (store) => _initResolve(store),
+          converter: (store) => SelectedAchievementViewModel.fromStore(store, widget.achievementId),
+          builder: (context, viewModel) => _buildLayout(context, viewModel),
+        )
+      );
+    }
+
+    return _buildLayout(context, widget.fakedViewModel);
   }
 
   Widget _buildLayout(BuildContext context, SelectedAchievementViewModel viewModel) {
-    return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _buildHeader(context, viewModel),
-          _buildStats(context, viewModel)
-        ]
-      )
+    return Column(
+      children: [
+        _buildHeader(context, viewModel),
+        _buildStats(context, viewModel)
+      ]
     );
   }
 
@@ -333,11 +346,18 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
     return completer.future;
   }
 
-  void _initResolve(Store<AppState> store) {
-    final viewModel = SelectedAchievementViewModel.fromStore(store, widget.achievementId);
+  void _initResolve(Store<AppState> store, {SelectedAchievementViewModel fakedViewModel}) {
+    final viewModel = fakedViewModel ?? SelectedAchievementViewModel.fromStore(store, widget.achievementId);
 
-    image = NetworkImage('${ApiClient.staticUrl}/${viewModel.achievement.bigImage.imagePath}');
+    /*image = NetworkImage('${ApiClient.staticUrl}/${viewModel.achievement.bigImage.imagePath}');
+    mask = fakedViewModel == null 
+      ? NetworkImage('${ApiClient.staticUrl}/${viewModel.category.maskImagePath}')
+      : FileImage(File(fakedViewModel.achievement.bigImage.imagePath));*/
+
     mask = NetworkImage('${ApiClient.staticUrl}/${viewModel.category.maskImagePath}');
+    image = fakedViewModel == null 
+      ? NetworkImage('${ApiClient.staticUrl}/${viewModel.achievement.bigImage.imagePath}')
+      : FileImage(File(fakedViewModel.achievement.bigImage.imagePath));
 
     bigImageWidth = 1.0 * viewModel.achievement.bigImage.width;
     bigImageHeight = 1.0 * viewModel.achievement.bigImage.height;

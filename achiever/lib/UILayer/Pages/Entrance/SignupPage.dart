@@ -92,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
 
     final signupButton = new Container(
 			margin: EdgeInsets.only(top: 52.0),
-      child: AchieverButton(335, 56, new Text('ЗАРЕГИСТРИРОВАТЬСЯ', style: TextStyle(
+      child: AchieverButton(56, new Text('ЗАРЕГИСТРИРОВАТЬСЯ', style: TextStyle(
 					color: Colors.white,
 					fontSize: 18.0)), validate),
 		);

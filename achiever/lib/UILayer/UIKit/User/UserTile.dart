@@ -8,7 +8,7 @@ import 'package:achiever/AppContainer.dart';
 class UserTile extends StatefulWidget {
   final UserDto user;
 
-  UserTile(this.user) : super(key: UniqueKey());
+  UserTile(this.user, {Key key}) : super(key: key);
 
   @override
   UserTileState createState() => UserTileState(user);
@@ -23,8 +23,6 @@ class UserTileState extends State<UserTile> {
   UserTileState(this.user) {
     following = user.following;
   }
-
-
 
   @override
   Widget build(BuildContext context) {

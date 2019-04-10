@@ -79,7 +79,7 @@ class DebugRoutingPageState extends State<DebugRoutingPage> {
 		return new Container(
 			margin: EdgeInsets.only(top: 25.0),
 			padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
-      child: AchieverButton(350.0, 56.0, new Text(path, style: TextStyle(
+      child: AchieverButton(56.0, new Text(path, style: TextStyle(
 					color: Colors.white,
 					fontSize: 18.0)), () => Navigator.of(context).pushNamed(path))
 		);

@@ -99,7 +99,8 @@ class SearchResultPageState extends State<SearchResultPage> {
             child: AchieverAchievement(x, 
               MediaQuery.of(context).size.width - 16 * 2,
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}')
+              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}'),
+              key: ValueKey(x.id),
             ),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => SelectedAchievementPage(x.id))),
@@ -133,7 +134,7 @@ class SearchResultPageState extends State<SearchResultPage> {
       columnChildren.add(
         Container(
           margin: EdgeInsets.only(top: 12.0 + (index > 0 ? 8 : 0)),
-          child: UserTile(x),
+          child: UserTile(x, key: ValueKey(x.user.id),),
         )
       );
       index++;

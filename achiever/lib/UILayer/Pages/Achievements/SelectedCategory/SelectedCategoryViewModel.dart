@@ -3,10 +3,12 @@ import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import 'package:achiever/BLLayer/Redux/Achievements/AllAchievementsActions.dart';
 import 'package:achiever/BLLayer/Redux/Models/AchievementsByCategory.dart';
+import 'package:achiever/BLLayer/Models/AchievementCategories/AchievementCategory.dart';
 import 'dart:async';
 
 class SelectedCategoryViewModel {
   final String categoryId;
+  final AchievementCategory category;
   final List<Achievement> allAchievements;
   final List<Achievement> myAchievements;
   final String name;
@@ -15,6 +17,7 @@ class SelectedCategoryViewModel {
 
   SelectedCategoryViewModel({
     this.categoryId,
+    this.category,
     this.allAchievements,
     this.myAchievements,
     this.name,
@@ -29,6 +32,7 @@ class SelectedCategoryViewModel {
 
     return SelectedCategoryViewModel(
       categoryId: categoryId,
+      category: state.achievementCategories.singleWhere((x) => x.id == categoryId),
       allAchievements: achievementsByCategory.all,
       myAchievements: achievementsByCategory.my,
       name: state.achievementCategories.singleWhere((x) => x.id == categoryId).title,
