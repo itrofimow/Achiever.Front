@@ -7,7 +7,7 @@ import 'dart:io';
 abstract class IFeedApi {
 	Future<FeedPageResponse> getMyFeedPage(int index);
 
-  Future<FeedEntryResponse> getAuthorFeedEntry(int index, String authorId);
+  Future<FeedPageResponse> getAuthorFeedEntry(int index, String authorId);
 
   Future createFeedEntryByAchievement(CreateEntryByAchievementRequest request, List<File> images);
 

@@ -26,10 +26,10 @@ class FeedApi implements IFeedApi {
     return model;
   }
 
-  Future<FeedEntryResponse> getAuthorFeedEntry(int index, String authorId) async {
-    final model = await _client.makeGet<FeedEntryResponse>(
-      '/feed/authorone/$index&authorId=$authorId',
-      (json) => FeedEntryResponse.fromJson(json));
+  Future<FeedPageResponse> getAuthorFeedEntry(int index, String authorId) async {
+    final model = await _client.makeGet<FeedPageResponse>(
+      '/feed/authorone/$index/$authorId',
+      (json) => FeedPageResponse.fromJson(json));
 
     return model;
   }

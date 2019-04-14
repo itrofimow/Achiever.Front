@@ -8,6 +8,8 @@ import 'package:achiever/UILayer/Pages/Profile/TheirProfilePage.dart';
 import 'FeedEntry/FeedEntryPage.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:quiver/strings.dart';
+import 'package:achiever/AppContainer.dart';
+import 'package:achiever/BLLayer/Redux/Navigation/NavigationActions.dart';
 
 class NoScrollGlowBehavior extends ScrollBehavior {
 
@@ -35,12 +37,12 @@ class FeedTile extends StatelessWidget {
     if (model.entry.authorId == userId)
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => MyProfilePage(),
-        settings: RouteSettings(name: 'profile')
+        settings: RouteSettings(name: 'my profile')
       ));
     else
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => TheirProfilePage(model.entry.authorId),
-        settings: RouteSettings(name: 'their profile')
+        settings: RouteSettings(name: model.authorNickname)
       ));
   }
 

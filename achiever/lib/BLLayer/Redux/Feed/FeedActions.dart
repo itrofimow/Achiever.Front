@@ -32,9 +32,14 @@ class AddCommentAction {
 
 ThunkAction<AppState> likeOrUnlike(String id) {
   return (Store<AppState> store) async { 
-    await AppContainer.feedApi.likeOrUnlike(id);
-
     store.dispatch(LikeOrUnlikeAction(id));
+    try {
+      await AppContainer.feedApi.likeOrUnlike(id);
+    }
+    catch (e) {
+      await Future.delayed(Duration(seconds: 5));
+      store.dispatch(LikeOrUnlikeAction(id));
+    }
   };
 }
 

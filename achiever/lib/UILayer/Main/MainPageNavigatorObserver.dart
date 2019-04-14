@@ -17,6 +17,6 @@ class MainPageNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPush(Route route, Route previousRoute) {
-    Future.delayed(Duration(milliseconds: 200)).then((_) => store.dispatch(SetCurrentRouteNameAction(index, route.settings.name)));
+    store.dispatch(SetCurrentRouteNameAction(index, route.settings.name));
   }
 }

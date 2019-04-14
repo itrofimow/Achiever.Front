@@ -21,6 +21,13 @@ import 'package:achiever/UILayer/UIKit/ScrollWithoutGlow.dart';
 import 'SettingsPage.dart';
 
 import 'package:achiever/AppContainer.dart';
+import 'package:achiever/BLLayer/Models/User/User.dart';
+
+import 'package:achiever/BLLayer/Models/User/UserDto.dart';
+import '../ExpandedStatsPage.dart';
+
+import '../../PersonalFeed/PersonalFeedPage.dart';
+import 'dart:async';
 
 class MyProfilePage extends StatefulWidget {
 
@@ -29,6 +36,10 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
+  Future<List<UserDto>> _getFollowingsFuture;
+  Future<List<UserDto>> _getFollowersFuture;
+  ScrollController _scrollController = ScrollController();
+
   bool loadingEntriesCount = true;
   int entriesCount = 0;
 
@@ -45,7 +56,11 @@ class MyProfilePageState extends State<MyProfilePage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MyProfileViewModel>(
       onInit: (store) {
-        fetchEntriesCount(MyProfileViewModel.fromStore(store).user.id);
+        final initViewModel = MyProfileViewModel.fromStore(store);
+        fetchEntriesCount(initViewModel.user.id);
+
+        _getFollowingsFuture = AppContainer.userApi.getFollowings(initViewModel.user.id);
+        _getFollowersFuture = AppContainer.userApi.getFollowers(initViewModel.user.id);
       },
       converter: (store) => MyProfileViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel)
@@ -55,13 +70,18 @@ class MyProfilePageState extends State<MyProfilePage> {
   Widget _buildLayout(BuildContext context, MyProfileViewModel viewModel) {
     return ScrollWithoutGlow(
       child: RefreshIndicator(
-        onRefresh: () => fetchEntriesCount(viewModel.user.id),
+        onRefresh: () {
+          fetchEntriesCount(viewModel.user.id);
+          return viewModel.resetPersonalFeed();
+        },
         child: ListView(
+          controller: _scrollController,
           children: <Widget>[
-            _buildFitted(context, _buildHeader(context, viewModel)),
+            _buildFitted(context, buildHeader(context, viewModel.user, true, true)),
             _buildFitted(context, _buildAbout(context, viewModel)),
             _buildFitted(context, _buildStats(context, viewModel)),
-            _buildDivider(context)
+            _buildDivider(context),
+            _buildPersonalFeed(context, viewModel)
           ],
         )
       )
@@ -75,56 +95,15 @@ class MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, MyProfileViewModel viewModel) {
+  static Widget buildHeader(BuildContext context, User user, bool isMyProfile, bool isFollowing) {
     final profileImage = new Container(
       height: 56.0,
       width: 56.0,
       child: new ClipRRect(
         borderRadius: BorderRadius.circular(50.0),
-        child: new CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${viewModel.user.profileImagePath}',
+        child: new CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${user.profileImagePath}',
           width: 36.0, height: 36.0,)
       ),
-    );
-
-    final editButton = GestureDetector(
-      child: Container(
-        margin: EdgeInsets.only(right: 8),
-        color: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            color: Color.fromARGB(255, 242, 242, 242)
-          ),
-          height: 36,
-          child: Center(
-            widthFactor: 1,
-            child: Container(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: Text('Редактировать', style: TextStyle(
-                fontSize: 13,
-                letterSpacing: 0.22,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 51, 51, 51)
-              )),
-            ),
-          ),
-        ),
-      ),
-      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
-          builder: (_) => EditProfilePage(viewModel.user), settings: RouteSettings(
-            name: 'editProfile'
-          ))),
-    );
-
-    final settingsButton = GestureDetector(
-      child: Container(
-        height: 36,
-        width: 36,
-        child: Image.asset('assets/settings_icon.png', width: 36, height: 36),
-      ),
-      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
-        builder: (_) => SettingsPage()
-      )),
     );
 
     return Container(
@@ -134,11 +113,92 @@ class MyProfilePageState extends State<MyProfilePage> {
         children: <Widget>[
           profileImage,
           Expanded(child: Container(),),
-          editButton,
-          settingsButton
+          buildHeaderButtons(context, user, isMyProfile, isFollowing)
         ],
       ),
     );
+  }
+
+  static Widget buildHeaderButtons(BuildContext context, User user, bool isMyProfile, bool isFollowing) {
+    if (isMyProfile) {
+      final editButton = GestureDetector(
+        child: Container(
+          margin: EdgeInsets.only(right: 8),
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              color: Color.fromARGB(255, 242, 242, 242)
+            ),
+            height: 36,
+            child: Center(
+              widthFactor: 1,
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Text('Редактировать', style: TextStyle(
+                  fontSize: 13,
+                  letterSpacing: 0.22,
+                  fontWeight: FontWeight.w500,
+                  color: Color.fromARGB(255, 51, 51, 51)
+                )),
+              ),
+            ),
+          ),
+        ),
+        onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+            builder: (_) => EditProfilePage(user), settings: RouteSettings(
+              name: 'editProfile'
+            ))),
+      );
+
+      final settingsButton = GestureDetector(
+        child: Container(
+          height: 36,
+          width: 36,
+          child: Image.asset('assets/settings_icon.png', width: 36, height: 36),
+        ),
+        onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+          builder: (_) => SettingsPage()
+        )),
+      );
+
+      return Row(
+        children: <Widget>[
+          editButton,
+          settingsButton
+        ],
+      );
+    }
+
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.only(right: 8),
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              color: Color.fromARGB(255, 242, 242, 242)
+            ),
+            height: 36,
+            child: Center(
+              widthFactor: 1,
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Text('Вы подписаны', style: TextStyle(
+                  fontSize: 13,
+                  letterSpacing: 0.22,
+                  fontWeight: FontWeight.w500,
+                  color: Color.fromARGB(255, 51, 51, 51)
+                )),
+              ),
+            ),
+          ),
+        ),
+        onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+            builder: (_) => EditProfilePage(user), settings: RouteSettings(
+              name: 'editProfile'
+            ))),
+      );
   }
 
   Widget _buildAbout(BuildContext context, MyProfileViewModel viewModel) {
@@ -203,11 +263,25 @@ class MyProfilePageState extends State<MyProfilePage> {
           _buildStatsBlock(context, loadingEntriesCount ? 0 : entriesCount, 'Записей'),
           Container(
             margin: EdgeInsets.only(left: 36),
-            child: _buildStatsBlock(context, viewModel.user.stats.followers, 'Подписчиков'),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: _buildStatsBlock(context, viewModel.user.stats.followers, 'Подписчиков'),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (innerContext) => ExtendedStatsPage(_getFollowersFuture),
+                settings: RouteSettings(name: 'followers')
+              )),
+            )
           ),
           Container(
             margin: EdgeInsets.only(left: 36),
-            child: _buildStatsBlock(context, viewModel.user.stats.following, 'Подписок'),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: _buildStatsBlock(context, viewModel.user.stats.following, 'Подписок'),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ExtendedStatsPage(_getFollowingsFuture),
+                settings: RouteSettings(name: 'followings')
+              )),
+            )
           )
         ]
       ),
@@ -220,6 +294,10 @@ class MyProfilePageState extends State<MyProfilePage> {
       height: 20,
       color: Color.fromARGB(255, 242, 242, 242),
     );
+  }
+
+  Widget _buildPersonalFeed(BuildContext context, MyProfileViewModel viewModel) {
+    return PersonalFeedPage(viewModel.user.id, _scrollController);
   }
   
   Widget _buildStatsBlock(BuildContext context, int count, String desc) {

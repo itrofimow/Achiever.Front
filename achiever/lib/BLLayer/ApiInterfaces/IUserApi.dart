@@ -1,6 +1,7 @@
 import '../Models/User/User.dart';
 import '../Models/Notifications/AchieverNotification.dart';
 import 'dart:io';
+import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 
 abstract class IUserApi {
   Future<User> getCurrentUser();
@@ -12,4 +13,8 @@ abstract class IUserApi {
   Future<List<AchieverNotification>> getNotifications();
 
   Future<int> countFeedEntries(String userId);
+
+  Future<List<UserDto>> getFollowers(String userId);
+
+  Future<List<UserDto>> getFollowings(String userId);
 }

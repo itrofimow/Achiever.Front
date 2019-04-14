@@ -5,6 +5,7 @@ import 'User/Draft/DraftState.dart';
 import 'Achievements/AllAchievementsState.dart';
 import 'Feed/FeedState.dart';
 import 'Navigation/NavigationState.dart';
+import 'PersonalFeed/PersonalFeedState.dart';
 
 @immutable
 class AppState {
@@ -14,6 +15,7 @@ class AppState {
   final AllAchievementsState allAchievementsState;
   final FeedState feedState;
   final NavigationState navigationState;
+  final PersonalFeedState personalFeedState;
 
   AppState({
     @required this.loginState,
@@ -21,7 +23,8 @@ class AppState {
     @required this.draftState,
     @required this.allAchievementsState,
     @required this.feedState,
-    @required this.navigationState
+    @required this.navigationState,
+    @required this.personalFeedState
   });
 
   factory AppState.initial() {
@@ -31,7 +34,8 @@ class AppState {
       draftState: DraftState.initial(),
       allAchievementsState: AllAchievementsState.initial(),
       feedState: FeedState.initial(),
-      navigationState: NavigationState.initial()
+      navigationState: NavigationState.initial(),
+      personalFeedState: PersonalFeedState.initial()
     );
   }
 
@@ -41,7 +45,8 @@ class AppState {
     DraftState draftState,
     AllAchievementsState allAchievementsState,
     FeedState feedState,
-    NavigationState navigationState
+    NavigationState navigationState,
+    PersonalFeedState personalFeedState
   }) {
     return AppState(
       loginState: loginState ?? this.loginState,
@@ -49,7 +54,8 @@ class AppState {
       draftState: draftState ?? this.draftState,
       allAchievementsState: allAchievementsState ?? this.allAchievementsState,
       feedState: feedState ?? this.feedState,
-      navigationState: navigationState ?? this.navigationState
+      navigationState: navigationState ?? this.navigationState,
+      personalFeedState: personalFeedState ?? this.personalFeedState
     );
   }
 
@@ -61,12 +67,18 @@ class AppState {
       loginState == other.loginState &&
       userState == other.userState &&
       draftState == other.draftState &&
-      allAchievementsState ==other.allAchievementsState;
+      allAchievementsState == other.allAchievementsState &&
+      feedState == other.feedState &&
+      navigationState == other.navigationState && 
+      personalFeedState == other.personalFeedState;
 
   @override
   int get hashCode =>
     loginState.hashCode ^
     userState.hashCode ^
     draftState.hashCode ^
-    allAchievementsState.hashCode;
+    allAchievementsState.hashCode ^
+    feedState.hashCode ^
+    navigationState.hashCode ^
+    personalFeedState.hashCode;
 }

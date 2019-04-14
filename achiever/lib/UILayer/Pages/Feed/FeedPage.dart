@@ -16,7 +16,45 @@ import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'dart:async';
 
-class FeedPage extends StatelessWidget {
+class FeedPage extends StatefulWidget {
+
+  @override
+  _FeedPageState createState() => _FeedPageState();
+}
+
+class _FeedPageState extends State<FeedPage> {
+  ScrollController _scrollController;
+  bool _isScrollDownLocked = false;
+
+  _scrollListener() async {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent && 
+      !_scrollController.position.outOfRange) {
+      if (_isScrollDownLocked) return;
+
+      setState(() {
+        _isScrollDownLocked = true;
+      });
+
+      final completer = Completer<Null>();
+      AppContainer.store.dispatch(fetchNewFeedPage(completer));
+      await completer.future;
+
+      _isScrollDownLocked = false;
+      if (mounted) {
+        setState(() {
+          
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController()
+      ..addListener(_scrollListener);
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -37,17 +75,34 @@ class FeedPage extends StatelessWidget {
         builder: (context) => FeedEntryPage(innerModel.entry.id),
         settings: RouteSettings(name: 'feedEntry')));
 
+    final listChildren = List<Widget>();
+    viewModel.entries.forEach((x){
+      listChildren.add(FeedTile(x, true, 
+        viewModel.likeOrUnlikeCallback, _navigateFunc,
+        viewModel.userId));
+    });
+
+    if (_isScrollDownLocked)
+      listChildren.add(
+        Container(
+          height: 36,
+          margin: EdgeInsets.only(top: 4, bottom: 4),
+          child: Center(
+            widthFactor: 1,
+            heightFactor: 1,
+            child: CircularProgressIndicator(),
+          ),
+        )
+      );
+
     return RefreshIndicator(
         onRefresh: () {
           return viewModel.resetFeed();
         },
         child: ListView(
+          controller: _scrollController,
           //cacheExtent: MediaQuery.of(context).size.height * 2,
-          children: viewModel.entries.map((x){
-            return FeedTile(x, true, 
-              viewModel.likeOrUnlikeCallback, _navigateFunc,
-              viewModel.userId);
-          }).toList(),
+          children: listChildren,
       )
     );
   }

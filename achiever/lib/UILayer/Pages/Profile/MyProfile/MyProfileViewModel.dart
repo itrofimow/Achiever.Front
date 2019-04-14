@@ -3,6 +3,7 @@ import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:achiever/BLLayer/Models/User/User.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'package:achiever/BLLayer/Redux/User/Draft/DraftActions.dart';
+import '../../PersonalFeed/PersonalFeedViewModel.dart';
 
 class MyProfileViewModel {
   final User user;
@@ -13,6 +14,7 @@ class MyProfileViewModel {
 
   final Function update;
   final Function(String, String, String) updateDraft;
+  final Function resetPersonalFeed;
 
   MyProfileViewModel({
     this.user,
@@ -20,7 +22,8 @@ class MyProfileViewModel {
     this.newAbout,
     this.newProfileImagePath,
     this.update,
-    this.updateDraft
+    this.updateDraft,
+    this.resetPersonalFeed
   });
 
   static MyProfileViewModel fromStore(Store<AppState> store) {
@@ -43,6 +46,11 @@ class MyProfileViewModel {
           newNickname,
           newAbout,
           newProfileImagePah));
+      },
+      resetPersonalFeed: () {
+        final personalFeedViewModel = PersonalFeedViewModel.fromStore(store, userState.user.id);
+        personalFeedViewModel.resetFeed();
+        return personalFeedViewModel.loadMore();
       }
     );
   }
