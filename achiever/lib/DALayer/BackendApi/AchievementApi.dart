@@ -10,6 +10,7 @@ import 'package:achiever/BLLayer/Models/AchievementCategories/AchievementCategor
 import 'package:achiever/BLLayer/Models/AchievementCategories/AchievementCategoriesResponse.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/BLLayer/Models/User/AllUsersDto.dart';
+import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 
 import 'package:dio/dio.dart';
 
@@ -80,6 +81,15 @@ class AchievementApi implements IAchievementApi {
       (json) => AchievementCategoriesResponse.fromJson(json));
 
     return response.categories;
+  }
+
+  Future<AcquiredAtDto> checkIHave(String achievementId) async {
+    final response = await _client.makeGet<AcquiredAtDto>(
+      '/acquiredAchievement/my/check/$achievementId',
+      (json) => AcquiredAtDto.fromJson(json)
+    );
+
+    return response;
   }
 
   AchievementApi._internal() {

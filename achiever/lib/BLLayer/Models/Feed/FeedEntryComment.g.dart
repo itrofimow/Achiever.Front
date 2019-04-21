@@ -11,7 +11,8 @@ FeedEntryComment _$FeedEntryCommentFromJson(Map<String, dynamic> json) {
       json['authorId'] as String,
       json['text'] as String,
       json['authorNickname'] as String,
-      json['authorProfileImage'] as String);
+      json['authorProfileImage'] as String,
+      when: json['when'] as String);
 }
 
 abstract class _$FeedEntryCommentSerializerMixin {
@@ -19,10 +20,12 @@ abstract class _$FeedEntryCommentSerializerMixin {
   String get text;
   String get authorNickname;
   String get authorProfileImage;
+  String get when;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'authorId': authorId,
         'text': text,
         'authorNickname': authorNickname,
-        'authorProfileImage': authorProfileImage
+        'authorProfileImage': authorProfileImage,
+        'when': when
       };
 }

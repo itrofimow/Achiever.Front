@@ -2,6 +2,7 @@ import '../Models/Achievement/Achievement.dart';
 import '../Models/AchievementCategories/AchievementCategory.dart';
 import 'dart:io';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
+import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 
 abstract class IAchievementApi {
 	Future<List<Achievement>> getAll();
@@ -17,4 +18,6 @@ abstract class IAchievementApi {
   Future createAchievement(Achievement model, File backgroundImage, File foregroundImage);
 
   Future<List<AchievementCategory>> getAllCategories();
+
+  Future<AcquiredAtDto> checkIHave(String achievementId);
 }

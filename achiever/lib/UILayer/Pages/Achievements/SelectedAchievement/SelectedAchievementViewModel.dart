@@ -9,7 +9,7 @@ class SelectedAchievementViewModel {
 
   SelectedAchievementViewModel({
     this.achievement,
-    this.category
+    this.category,
   });
 
   static SelectedAchievementViewModel fromStore(Store<AppState> store, String achievementId) {

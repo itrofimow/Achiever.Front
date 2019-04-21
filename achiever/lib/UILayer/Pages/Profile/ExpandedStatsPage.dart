@@ -5,7 +5,7 @@ import 'package:achiever/UILayer/UIKit/User/UserTile.dart';
 class ExtendedStatsPage extends StatelessWidget {
   final Future<List<UserDto>> _getUsersFuture;
 
-  ExtendedStatsPage(this._getUsersFuture);
+  ExtendedStatsPage(this._getUsersFuture, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -9,13 +9,15 @@ class User extends AchieverJsonable with _$UserSerializerMixin {
   String id;
   String nickname;
   String profileImagePath;
+  String displayName;
   UserStats stats;
   String about;
 
   User({
     this.id,
     this.nickname, 
-    this.profileImagePath, 
+    this.profileImagePath,
+    this.displayName,
     this.stats, 
     this.about});
 

@@ -9,6 +9,8 @@ abstract class IFeedApi {
 
   Future<FeedPageResponse> getAuthorFeedEntry(int index, String authorId);
 
+  Future<FeedPageResponse> getAchievementFeedPage(int index, String achievementId);
+
   Future createFeedEntryByAchievement(CreateEntryByAchievementRequest request, List<File> images);
 
   Future likeOrUnlike(String feedEntryId);

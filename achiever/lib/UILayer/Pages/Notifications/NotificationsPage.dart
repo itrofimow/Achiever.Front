@@ -11,6 +11,7 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, NotificationsViewModel>(
+      onInit: (store) => NotificationsViewModel.fromStore(store).fetchNotifications(),
       converter: (store) => NotificationsViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel),
     );
@@ -73,7 +74,7 @@ class NotificationsPage extends StatelessWidget {
           ),),
           Container(
             margin: EdgeInsets.only(top: 4.0),
-            child: Text('14 feb. 14:02', style: TextStyle(
+            child: Text(notification.when, style: TextStyle(
               color: Color.fromRGBO(51, 51, 51, 0.7),
               fontSize: 12.0,
               letterSpacing: 0.21,

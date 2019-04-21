@@ -18,6 +18,7 @@ AppState appReducer(AppState state, dynamic action) {
     allAchievementsState: allAchievementsReducer(state.allAchievementsState, action),
     feedState: feedReducer(state.feedState, action),
     navigationState: navigationReducer(state.navigationState, action),
-    personalFeedState: personalFeedReducer(state.personalFeedState, action)
+    personalFeedState: personalFeedReducer(state.personalFeedState, action),
+    achievementsFeedState: personalFeedReducer(state.achievementsFeedState, action),
   );
 }

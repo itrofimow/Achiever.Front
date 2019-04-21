@@ -6,10 +6,12 @@ import 'PersonalFeedActions.dart';
 final personalFeedReducer = combineReducers<PersonalFeedState>([
   TypedReducer<PersonalFeedState, AddPersonalFeedPageAction>(_addPersonalFeedPage),
   TypedReducer<PersonalFeedState, ResetPersonalFeedAction>(_resetPersonalFeed),
-  TypedReducer<PersonalFeedState, LockPersonalFeedAction>(_lockPersonalFeed)
+  TypedReducer<PersonalFeedState, LockPersonalFeedAction>(_lockPersonalFeed),
 ]);
 
 PersonalFeedState _addPersonalFeedPage(PersonalFeedState state, AddPersonalFeedPageAction action) {
+  if (state.isAchievementState != action.isAchievementAction) return state;
+
   final oldFeed = state.feedByAuthor[action.authourId];
 
   final newList = oldFeed.entries;
@@ -29,6 +31,8 @@ PersonalFeedState _addPersonalFeedPage(PersonalFeedState state, AddPersonalFeedP
 }
 
 PersonalFeedState _resetPersonalFeed(PersonalFeedState state, ResetPersonalFeedAction action) {
+  if (state.isAchievementState != action.isAchievementAction) return state;
+
   final newMap = Map<String, PersonalFeed>.from(state.feedByAuthor);
   newMap[action.authorId] = PersonalFeed.initial();
 
@@ -36,6 +40,8 @@ PersonalFeedState _resetPersonalFeed(PersonalFeedState state, ResetPersonalFeedA
 }
 
 PersonalFeedState _lockPersonalFeed(PersonalFeedState state, LockPersonalFeedAction action) {
+  if (state.isAchievementState != action.isAchievementAction) return state;
+
   final newMap = Map<String, PersonalFeed>.from(state.feedByAuthor);
   newMap[action.authorId].isLocked = true;
 

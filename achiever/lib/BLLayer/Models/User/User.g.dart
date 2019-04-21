@@ -11,6 +11,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
       id: json['id'] as String,
       nickname: json['nickname'] as String,
       profileImagePath: json['profileImagePath'] as String,
+      displayName: json['displayName'] as String,
       stats: json['stats'] == null
           ? null
           : new UserStats.fromJson(json['stats'] as Map<String, dynamic>),
@@ -21,12 +22,14 @@ abstract class _$UserSerializerMixin {
   String get id;
   String get nickname;
   String get profileImagePath;
+  String get displayName;
   UserStats get stats;
   String get about;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': id,
         'nickname': nickname,
         'profileImagePath': profileImagePath,
+        'displayName': displayName,
         'stats': stats,
         'about': about
       };

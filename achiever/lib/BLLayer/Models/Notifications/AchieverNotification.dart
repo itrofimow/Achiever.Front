@@ -8,8 +8,9 @@ class AchieverNotification extends Object with _$AchieverNotificationSerializerM
   final String feedEntryId;
   final User author;
   final String text;
+  final String when;
 
-  AchieverNotification(this.feedEntryId, this.author, this.text);
+  AchieverNotification(this.feedEntryId, this.author, this.text, this.when);
 
   factory AchieverNotification.fromJson(Map<String, dynamic> json) => _$AchieverNotificationFromJson(json);
 }

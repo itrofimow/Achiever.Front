@@ -3,9 +3,11 @@ import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
 
 @immutable
 class PersonalFeedState {
+  final bool isAchievementState;
   final Map<String, PersonalFeed> feedByAuthor;
 
   PersonalFeedState({
+    this.isAchievementState,
     this.feedByAuthor
   });
 
@@ -13,12 +15,14 @@ class PersonalFeedState {
     Map<String, PersonalFeed> feedByauthor
   }) {
     return PersonalFeedState(
+      isAchievementState: this.isAchievementState,
       feedByAuthor: feedByauthor ?? this.feedByAuthor
     );
   }
 
-  factory PersonalFeedState.initial() {
+  factory PersonalFeedState.initial(bool isAchievementState) {
     return PersonalFeedState(
+      isAchievementState: isAchievementState,
       feedByAuthor: Map<String, PersonalFeed>()
     );
   }

@@ -85,7 +85,7 @@ class FeedEntryPage extends StatelessWidget {
           ),),
           Container(
             margin: EdgeInsets.only(top: 4.0),
-            child: Text('14 feb. 14:02', style: TextStyle(
+            child: Text(comment.when, style: TextStyle(
               color: Color.fromRGBO(51, 51, 51, 0.7),
               fontSize: 12.0,
               letterSpacing: 0.21,

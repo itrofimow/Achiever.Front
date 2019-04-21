@@ -7,6 +7,7 @@ import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'MainPageNavigatorObserver.dart';
 
 import 'package:achiever/AppContainer.dart';
+import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
 class MainAppPage extends StatelessWidget {
 
@@ -15,6 +16,10 @@ class MainAppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MainAppViewModel> (
+      onInit: (store) {
+        store.dispatch(fetchFollowers);
+        store.dispatch(fetchFollowings);
+      },
       converter: (store) => MainAppViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel),
     );

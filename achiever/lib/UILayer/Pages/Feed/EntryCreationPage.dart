@@ -106,17 +106,10 @@ class _EntryCreationPageState extends State<EntryCreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: new Text('Новый пост'),
-      ),
-      body: !achievementLoaded ? new Align(
+    return !achievementLoaded ? new Align(
         alignment: Alignment.center,
         child: CircularProgressIndicator(),
-      ) : buildLayout(context),
-    );
+      ) : buildLayout(context);
   }
 
   Widget buildLayout(BuildContext context) {

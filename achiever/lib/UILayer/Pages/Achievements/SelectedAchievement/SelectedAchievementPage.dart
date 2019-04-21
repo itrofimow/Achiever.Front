@@ -10,6 +10,9 @@ import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/UILayer/UIKit/Images/AchieverProfileImage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/BLLayer/ApiInterfaces/IAchievementApi.dart';
+import '../../PersonalFeed/PersonalFeedPage.dart';
+import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
+import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
 
 import 'dart:ui' as ui;
 import 'dart:io';
@@ -44,6 +47,10 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
   List<UserDto> followingsWhoHave;
 
+  ScrollController _scrollController = ScrollController();
+
+  AcquiredAtDto acquiredAt;
+
   @override
   void initState() {
     backgroundWidget = Container();
@@ -60,6 +67,12 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
     if (widget.fakedViewModel != null)
       _initResolve(AppContainer.store, fakedViewModel: widget.fakedViewModel);
+
+    api.checkIHave(widget.achievementId).then((val){
+      setState(() {
+        acquiredAt = val;
+      });
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _calculateBackgroundDecoration());
 
@@ -82,10 +95,13 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
   }
 
   Widget _buildLayout(BuildContext context, SelectedAchievementViewModel viewModel) {
-    return Column(
+    return ListView(
+      padding: EdgeInsets.zero,
       children: [
         _buildHeader(context, viewModel),
-        _buildStats(context, viewModel)
+        _buildStats(context, viewModel),
+        _buildDivider(context),
+        PersonalFeedPage(true, widget.achievementId, _scrollController),
       ]
     );
   }
@@ -251,31 +267,97 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
   Widget _buildButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 28, bottom: 48),
-      child: GestureDetector(
-        child: Container(
-          color: Colors.transparent,
+      child: acquiredAt == null ? _buildSkeletonButton(context) :
+        acquiredAt.value 
+          ? _buildAcquiredButton(context)
+          : _buildAcquireButton(context)
+    );
+  }
+
+  Widget _buildSkeletonButton(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            color: Colors.white
+          ),
+        height: 56,
+        width: 271,
+        child: Center(
+          widthFactor: 1,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              color: Colors.white
-            ),
-            height: 56,
-            child: Center(
-              widthFactor: 1,
-              child: Container(
-                padding: EdgeInsets.only(left: 36, right: 36),
-                child: Text('Отметить как выполненное', style: TextStyle(
-                  fontSize: 15,
-                  letterSpacing: 0.26,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 51, 51, 51)
-                )),
-              ),
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      )
+    );
+  }
+
+  Widget _buildAcquiredButton(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            color: Colors.white
+          ),
+        height: 56,
+        child: Container(
+          padding: EdgeInsets.only(left: 20, right: 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Выполнено ${acquiredAt.when}', style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                letterSpacing: 0.26,
+                color: Color.fromRGBO(51, 51, 51, 0.5)
+              ),),
+              Container(
+                width: 36,
+                height: 36,
+                margin: EdgeInsets.only(left: 12),
+                child: Image.asset(
+                  'assets/following_icon.png', 
+                  width: 36, height: 36),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAcquireButton(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        color: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            color: Colors.white
+          ),
+          height: 56,
+          child: Center(
+            widthFactor: 1,
+            child: Container(
+              padding: EdgeInsets.only(left: 36, right: 36),
+              child: Text('Отметить как выполненное', style: TextStyle(
+                fontSize: 15,
+                letterSpacing: 0.26,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 51, 51, 51)
+              )),
             ),
           ),
         ),
-        onTap: () => {},
-      )
+      ),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => EntryCreationPage(widget.achievementId),
+        settings: RouteSettings(name: 'createEntry')
+      )),
     );
   }
 
@@ -300,6 +382,13 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
       width: 112,
       height: 1.0 * viewModel.category.maskHeight,
       color: Colors.blue,
+    );
+  }
+
+  Widget _buildDivider(BuildContext context) {
+    return Container(
+      height: 12,
+      color: Color.fromRGBO(242, 242, 242, 1),
     );
   }
 

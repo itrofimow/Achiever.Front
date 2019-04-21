@@ -4,6 +4,9 @@ import '../Images/AchieverProfileImage.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/AppContainer.dart';
+import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
+import 'package:achiever/AppContainer.dart';
+import 'dart:async';
 
 class UserTile extends StatefulWidget {
   final UserDto user;
@@ -90,13 +93,22 @@ class UserTileState extends State<UserTile> {
       isLoading = true;
     });
 
-    if (following)
-      await AppContainer.socialIntercationsApi.unfollow(user.user.id);
-    else
-      await AppContainer.socialIntercationsApi.follow(user.user.id);
+    final completer = Completer<bool>();
+    bool success = false;
+
+    if (following) {
+      AppContainer.store.dispatch(unfollowAndReload(user.user.id, completer));
+      
+      success = await completer.future;
+    }
+    else {
+      AppContainer.store.dispatch(followAndReload(user.user.id, completer));
+
+      success = await completer.future;
+    }
 
     setState(() {
-      following ^= true;
+      following ^= true & success;
       isLoading = false;      
     });
   }

@@ -11,28 +11,26 @@ import 'package:achiever/AppContainer.dart';
 import '../Feed/FeedTile.dart';
 
 class PersonalFeedPage extends StatefulWidget {
+  final bool isAchievementFeedPage;
   final String authorId;
   final ScrollController scrollController;
 
-  PersonalFeedPage(this.authorId, this.scrollController);
+  PersonalFeedPage(this.isAchievementFeedPage, this.authorId, this.scrollController);
 
   @override
   _PersonalFeedPageState createState() => _PersonalFeedPageState();
 }
 
 class _PersonalFeedPageState extends State<PersonalFeedPage> {
-
-
   _scrollListener() async {
-    int a = 5;
     if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent && 
       !widget.scrollController.position.outOfRange) {
 
-      final viewModel = PersonalFeedViewModel.fromStore(AppContainer.store, widget.authorId);
+      final viewModel = PersonalFeedViewModel.fromStore(AppContainer.store, widget.authorId, widget.isAchievementFeedPage);
       if (viewModel.isLocked) return;
 
       final completer = Completer<Null>();
-      AppContainer.store.dispatch(fetchNewPersonalFeedPage(widget.authorId, completer));
+      AppContainer.store.dispatch(fetchNewPersonalFeedPage(widget.authorId, completer, widget.isAchievementFeedPage));
       await completer.future;
       
     }
@@ -56,11 +54,11 @@ class _PersonalFeedPageState extends State<PersonalFeedPage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, PersonalFeedViewModel>(
       onInit: (store) {
-        store.dispatch(ResetPersonalFeedAction(widget.authorId));
+        store.dispatch(ResetPersonalFeedAction(widget.authorId, widget.isAchievementFeedPage));
 
-        store.dispatch(fetchNewPersonalFeedPage(widget.authorId, Completer<Null>()));
+        store.dispatch(fetchNewPersonalFeedPage(widget.authorId, Completer<Null>(), widget.isAchievementFeedPage));
       },
-      converter: (store) => PersonalFeedViewModel.fromStore(store, widget.authorId),
+      converter: (store) => PersonalFeedViewModel.fromStore(store, widget.authorId, widget.isAchievementFeedPage),
       builder: (innerContext, viewModel) => _buildLayout(innerContext, viewModel),
     );
   }
@@ -91,6 +89,7 @@ class _PersonalFeedPageState extends State<PersonalFeedPage> {
     return ListView(
       shrinkWrap: true,
       primary: false,
+      padding: EdgeInsets.zero,
       //controller: _scrollController,
       
       children: listChildren

@@ -34,6 +34,14 @@ class FeedApi implements IFeedApi {
     return model;
   }
 
+  Future<FeedPageResponse> getAchievementFeedPage(int index, String achievementId) async {
+    final model = await _client.makeGet<FeedPageResponse>(
+      '/feed/achievementOne/$index/$achievementId', 
+      (json) => FeedPageResponse.fromJson(json));
+
+    return model;
+  }
+
   Future createFeedEntryByAchievement(CreateEntryByAchievementRequest request, List<File> images) async {
     final jData = request.toJson();
     jData['files'] = images.map((file) {

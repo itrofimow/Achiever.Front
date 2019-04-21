@@ -47,27 +47,87 @@ class UpdateNotificationsListAction {
 
 class LogoutAction {}
 
+class SetFollowersAction {
+  final List<UserDto> followers;
+
+  SetFollowersAction(this.followers);
+}
+
+class SetFollowingsAction {
+  final List<UserDto> followings;
+
+  SetFollowingsAction(this.followings);
+}
+
+class FollowUserAction {
+  final String userId;
+
+  FollowUserAction(this.userId);
+}
+
+class UnfollowUserAction {
+  final String userId;
+
+  UnfollowUserAction(this.userId);
+}
+
+class AddKnownUserAction {
+  final UserDto user;
+
+  AddKnownUserAction(this.user);
+}
+
 ThunkAction<AppState> logout = (Store<AppState> store) async {
   await AppContainer.sharedPrefsService.setToken('');
 
   store.dispatch(LogoutAction());
 };
 
-ThunkAction<AppState> followAndReload(String id) {
+ThunkAction<AppState> followAndReload(String userId, Completer<bool> completer) {
   return (Store<AppState> store) async {
-    await AppContainer.socialIntercationsApi.follow(id);
+    store.dispatch(FollowUserAction(userId));
+    
+    try {
+      await AppContainer.socialIntercationsApi.follow(userId);
+      completer.complete(true);
+    }
+    catch (e) {
+      await Future.delayed(Duration(seconds: 5));
+      store.dispatch(UnfollowUserAction(userId));
 
-    store.dispatch(fetchAllUsers);
+      completer.complete(false);
+    }
   };
 }
 
-ThunkAction<AppState> unfollowAndReload(String id) {
+ThunkAction<AppState> unfollowAndReload(String userId, Completer<bool> completer) {
   return (Store<AppState> store) async {
-    await AppContainer.socialIntercationsApi.unfollow(id);
+    store.dispatch(UnfollowUserAction(userId));
 
-    store.dispatch(fetchAllUsers);
+    try {
+      await AppContainer.socialIntercationsApi.unfollow(userId);
+      completer.complete(true);
+    }
+    catch (e) {
+      await Future.delayed(Duration(seconds: 5));
+      store.dispatch(FollowUserAction(userId));
+
+      completer.complete(false);
+    }
   };
 }
+
+ThunkAction<AppState> fetchFollowers = (Store<AppState> store) async {
+  final followers = await AppContainer.userApi.getFollowers(store.state.userState.user.id);
+
+  store.dispatch(SetFollowersAction(followers));
+};
+
+ThunkAction<AppState> fetchFollowings = (Store<AppState> store) async {
+  final followings = await AppContainer.userApi.getFollowings(store.state.userState.user.id);
+
+  store.dispatch(SetFollowingsAction(followings));
+};
 
 ThunkAction<AppState> fetchAllUsers = (Store<AppState> store) async {
   final allUsers = await AppContainer.allUsersApi.getAllUsers();
@@ -102,7 +162,8 @@ ThunkAction<AppState> updateUserV2(File image, String name, String nickname, Str
   return (Store<AppState> store) async {
     final update = User(
       nickname: nickname,
-      about: about
+      about: about,
+      displayName: name
     );
 
     try {

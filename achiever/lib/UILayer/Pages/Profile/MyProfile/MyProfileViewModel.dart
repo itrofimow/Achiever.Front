@@ -5,6 +5,8 @@ import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'package:achiever/BLLayer/Redux/User/Draft/DraftActions.dart';
 import '../../PersonalFeed/PersonalFeedViewModel.dart';
 
+import 'package:achiever/BLLayer/Models/User/UserDto.dart';
+
 class MyProfileViewModel {
   final User user;
 
@@ -16,6 +18,9 @@ class MyProfileViewModel {
   final Function(String, String, String) updateDraft;
   final Function resetPersonalFeed;
 
+  final List<UserDto> followers;
+  final List<UserDto> followings;
+
   MyProfileViewModel({
     this.user,
     this.newNickname,
@@ -23,7 +28,10 @@ class MyProfileViewModel {
     this.newProfileImagePath,
     this.update,
     this.updateDraft,
-    this.resetPersonalFeed
+    this.resetPersonalFeed,
+
+    this.followers,
+    this.followings
   });
 
   static MyProfileViewModel fromStore(Store<AppState> store) {
@@ -48,10 +56,13 @@ class MyProfileViewModel {
           newProfileImagePah));
       },
       resetPersonalFeed: () {
-        final personalFeedViewModel = PersonalFeedViewModel.fromStore(store, userState.user.id);
+        final personalFeedViewModel = PersonalFeedViewModel.fromStore(store, userState.user.id, false);
         personalFeedViewModel.resetFeed();
         return personalFeedViewModel.loadMore();
-      }
+      },
+
+      followers: userState.followers.map((x) => userState.knownUsers[x]).toList(),
+      followings: userState.followings.map((x) => userState.knownUsers[x]).toList()
     );
   }
 }

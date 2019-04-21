@@ -12,16 +12,19 @@ AchieverNotification _$AchieverNotificationFromJson(Map<String, dynamic> json) {
       json['author'] == null
           ? null
           : new User.fromJson(json['author'] as Map<String, dynamic>),
-      json['text'] as String);
+      json['text'] as String,
+      json['when'] as String);
 }
 
 abstract class _$AchieverNotificationSerializerMixin {
   String get feedEntryId;
   User get author;
   String get text;
+  String get when;
   Map<String, dynamic> toJson() => <String, dynamic>{
         'feedEntryId': feedEntryId,
         'author': author,
-        'text': text
+        'text': text,
+        'when': when
       };
 }

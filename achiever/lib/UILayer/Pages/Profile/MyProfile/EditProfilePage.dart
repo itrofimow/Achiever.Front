@@ -47,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
 
-    _nameController.text = 'Мое отображаемое имя';
+    _nameController.text = widget.user.displayName;
     _nicknameController.text = widget.user.nickname;
     _aboutController.text = widget.user.about;
   }

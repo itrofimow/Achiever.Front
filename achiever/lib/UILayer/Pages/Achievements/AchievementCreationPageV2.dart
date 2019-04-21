@@ -9,6 +9,7 @@ import 'package:achiever/BLLayer/ApiInterfaces/IAchievementApi.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import 'package:achiever/BLLayer/Models/Achievement/ImageInfo.dart' as achiever;
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
+import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -212,4 +213,6 @@ class _AchievementApiMock extends IAchievementApi {
   Future createAchievement(Achievement model, File backgroundImage, File foregroundImage) => Future<Null>(null);
 
   Future<List<AchievementCategory>> getAllCategories() => Future.value(null);
+
+  Future<AcquiredAtDto> checkIHave(String achievementId) => Future.value(AcquiredAtDto(true, "завтра"));
 }

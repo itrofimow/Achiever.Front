@@ -84,7 +84,11 @@ class MainAppViewModel {
 
     if (currentRoute == 'editProfile') return null;
 
-    return AppBar(title: Text(currentRoute), backgroundColor: Colors.white,
-    elevation: 0,);
+    return AppBar(
+      centerTitle: true,
+      title: Text(currentRoute), 
+      backgroundColor: Colors.white,
+      elevation: 0,
+    );
   }
 }

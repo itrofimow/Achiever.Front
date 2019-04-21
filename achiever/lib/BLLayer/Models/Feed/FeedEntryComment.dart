@@ -9,9 +9,10 @@ class FeedEntryComment extends AchieverJsonable with _$FeedEntryCommentSerialize
   final String text;
   final String authorNickname;
   final String authorProfileImage;
+  final String when;
 
   FeedEntryComment(this.authorId, this.text,
-    this.authorNickname, this.authorProfileImage);
+    this.authorNickname, this.authorProfileImage, {this.when});
 
   factory FeedEntryComment.fromJson(Map<String, dynamic> json) => _$FeedEntryCommentFromJson(json);
 }

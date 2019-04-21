@@ -16,6 +16,7 @@ class AppState {
   final FeedState feedState;
   final NavigationState navigationState;
   final PersonalFeedState personalFeedState;
+  final PersonalFeedState achievementsFeedState;
 
   AppState({
     @required this.loginState,
@@ -24,7 +25,8 @@ class AppState {
     @required this.allAchievementsState,
     @required this.feedState,
     @required this.navigationState,
-    @required this.personalFeedState
+    @required this.personalFeedState,
+    @required this.achievementsFeedState
   });
 
   factory AppState.initial() {
@@ -35,7 +37,8 @@ class AppState {
       allAchievementsState: AllAchievementsState.initial(),
       feedState: FeedState.initial(),
       navigationState: NavigationState.initial(),
-      personalFeedState: PersonalFeedState.initial()
+      personalFeedState: PersonalFeedState.initial(false),
+      achievementsFeedState: PersonalFeedState.initial(true)
     );
   }
 
@@ -46,7 +49,8 @@ class AppState {
     AllAchievementsState allAchievementsState,
     FeedState feedState,
     NavigationState navigationState,
-    PersonalFeedState personalFeedState
+    PersonalFeedState personalFeedState,
+    PersonalFeedState achievementsFeedState
   }) {
     return AppState(
       loginState: loginState ?? this.loginState,
@@ -55,7 +59,8 @@ class AppState {
       allAchievementsState: allAchievementsState ?? this.allAchievementsState,
       feedState: feedState ?? this.feedState,
       navigationState: navigationState ?? this.navigationState,
-      personalFeedState: personalFeedState ?? this.personalFeedState
+      personalFeedState: personalFeedState ?? this.personalFeedState,
+      achievementsFeedState: achievementsFeedState ?? this.achievementsFeedState
     );
   }
 
@@ -70,7 +75,8 @@ class AppState {
       allAchievementsState == other.allAchievementsState &&
       feedState == other.feedState &&
       navigationState == other.navigationState && 
-      personalFeedState == other.personalFeedState;
+      personalFeedState == other.personalFeedState &&
+      achievementsFeedState == other.achievementsFeedState;
 
   @override
   int get hashCode =>
@@ -80,5 +86,6 @@ class AppState {
     allAchievementsState.hashCode ^
     feedState.hashCode ^
     navigationState.hashCode ^
-    personalFeedState.hashCode;
+    personalFeedState.hashCode ^
+    achievementsFeedState.hashCode;
 }
