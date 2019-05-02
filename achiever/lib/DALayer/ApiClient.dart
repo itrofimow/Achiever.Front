@@ -20,8 +20,10 @@ class ApiClient {
     _token = token;
   }
 
-  Future<T> makeGet<T>(String url, Function toModel) async {
-    final response = await _client.get(url);
+  Future<T> makeGet<T>(String url, Function toModel, 
+    {Map<String, String> params}) async {
+
+    final response = await _client.get(url, data: params);
 
     return toModel(response.data);
   }

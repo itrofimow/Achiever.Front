@@ -4,7 +4,7 @@ import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
 @immutable
 class FeedState {
   final List<FeedEntryResponse> entries;
-  final DateTime createdAt;
+  final String createdAt;
   final int lastIndex;
 
   FeedState({
@@ -15,7 +15,7 @@ class FeedState {
 
   FeedState copyWith({
     List<FeedEntryResponse> entries,
-    DateTime createdAt,
+    String createdAt,
     int lastIndex,
     String selectedEntryId
   }) {
@@ -29,7 +29,7 @@ class FeedState {
   factory FeedState.initial() {
     return FeedState(
       entries: List<FeedEntryResponse>(),
-      createdAt: DateTime.now(),
+      createdAt: null,
       lastIndex: 0,
     );
   }

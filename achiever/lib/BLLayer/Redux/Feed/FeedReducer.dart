@@ -16,7 +16,9 @@ FeedState _addPage(FeedState state, AddFeedPageAction action) {
   final entries = state.entries.map((f) => f).toList();
   entries.addAll(action.page.entries);
 
-  return state.copyWith(lastIndex: state.lastIndex + 1, entries: entries);
+  return state.copyWith(
+    lastIndex: state.lastIndex + 1, entries: entries,
+    createdAt: action.page.startedAt);
 }
 
 FeedState _resetFeed(FeedState state, ResetFeedAction action) => FeedState.initial();

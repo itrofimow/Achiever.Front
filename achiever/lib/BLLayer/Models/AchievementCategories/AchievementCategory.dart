@@ -9,13 +9,15 @@ class AchievementCategory extends Object with _$AchievementCategorySerializerMix
   final String subtitle;
   final int maskHeight;
   final String maskImagePath;
+  final String niceImagePath;
 
   AchievementCategory(
     this.id,
     this.title,
     this.subtitle,
     this.maskHeight,
-    this.maskImagePath
+    this.maskImagePath,
+    this.niceImagePath
   );
 
   factory AchievementCategory.fromJson(Map<String, dynamic> json) => _$AchievementCategoryFromJson(json);

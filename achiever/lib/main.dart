@@ -47,6 +47,8 @@ void main() async {
 	await SystemChrome.setPreferredOrientations(
 		[DeviceOrientation.portraitUp]);
 
+  //final test = await AppContainer.serverTimeApi.now();
+
   //await FirebaseInitializer.Init(store);
 
   final goToFeed = await _shouldGoToFeed(store);

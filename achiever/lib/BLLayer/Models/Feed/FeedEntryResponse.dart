@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import './FeedEntry.dart';
+import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 
 part 'FeedEntryResponse.g.dart';
 

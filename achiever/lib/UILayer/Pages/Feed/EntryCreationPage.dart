@@ -143,22 +143,24 @@ class _EntryCreationPageState extends State<EntryCreationPage> {
         )
       );
     }).toList();
-    photosList.add(
-      Container(
-        child: GestureDetector(
-          onTap: () => _addImageToList(),
-          child: Container(height: 96, width: 96,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(right: 16.0),
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 242, 242, 242),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Image.asset('assets/add_photo_icon.png', width: 48, height: 33,)
+    if (photosList.length < 10) {
+      photosList.add(
+        Container(
+          child: GestureDetector(
+            onTap: () => _addImageToList(),
+            child: Container(height: 96, width: 96,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(right: 16.0),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 242, 242, 242),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset('assets/add_photo_icon.png', width: 48, height: 33,)
+            )
           )
         )
-      )
-    );
+      );
+    }
 
     final photosBox = new Container(
       margin: EdgeInsets.only(top: 20.0),

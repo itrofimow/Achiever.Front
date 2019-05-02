@@ -31,7 +31,7 @@ class PersonalFeedState {
 class PersonalFeed {
   final List<FeedEntryResponse> entries;
   final int lastIndex;
-  final DateTime createdAt;
+  final String createdAt;
   bool isLocked;
 
   PersonalFeed({
@@ -44,7 +44,7 @@ class PersonalFeed {
   PersonalFeed copyWith({
     List<FeedEntryResponse> entries,
     int lastIndex,
-    DateTime createdAt,
+    String createdAt,
     bool isLocked
   }) {
     return PersonalFeed(
@@ -57,7 +57,7 @@ class PersonalFeed {
 
   factory PersonalFeed.initial() {
     return PersonalFeed(
-      createdAt: DateTime.now(),
+      createdAt: null,
       lastIndex: 0,
       entries: [],
       isLocked: false

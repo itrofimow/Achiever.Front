@@ -19,6 +19,11 @@ FeedEntry _$FeedEntryFromJson(Map<String, dynamic> json) {
       json['when'] as String,
       (json['images'] as List)?.map((e) => e as String)?.toList(),
       (json['likes'] as List)?.map((e) => e as String)?.toList(),
+      (json['likedUsers'] as List)
+          ?.map((e) => e == null
+              ? null
+              : new UserDto.fromJson(e as Map<String, dynamic>))
+          ?.toList(),
       json['likesCount'] as int,
       (json['comments'] as List)
           ?.map((e) => e == null
@@ -37,6 +42,7 @@ abstract class _$FeedEntrySerializerMixin {
   List<String> get images;
   String get when;
   List<String> get likes;
+  List<UserDto> get likedUsers;
   int get likesCount;
   List<FeedEntryComment> get comments;
   int get commentsCount;
@@ -49,6 +55,7 @@ abstract class _$FeedEntrySerializerMixin {
         'images': images,
         'when': when,
         'likes': likes,
+        'likedUsers': likedUsers,
         'likesCount': likesCount,
         'comments': comments,
         'commentsCount': commentsCount

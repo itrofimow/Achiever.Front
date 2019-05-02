@@ -129,13 +129,6 @@ class AchievementCategoriesPage extends StatelessWidget {
   }
 
   Widget _buildCategory(BuildContext context, AchievementCategory category) {
-    final List urls = [
-      'games_category.png',
-      'films_category.png',
-      'books_category.png',
-      'travel_category.png'
-    ];
-
     final image = Container(
       width: 88,
       height: 88,
@@ -150,7 +143,7 @@ class AchievementCategoriesPage extends StatelessWidget {
           alignment: Alignment.centerLeft,
           minWidth: 112,
           maxWidth: 112,
-            child: Image.network('${ApiClient.staticUrl}/uploads/${urls[_random.nextInt(urls.length)]}',
+            child: Image.network('${ApiClient.staticUrl}/${category.niceImagePath}',
             fit: BoxFit.fitWidth,),
         )
       )

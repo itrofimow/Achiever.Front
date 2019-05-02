@@ -46,7 +46,7 @@ ThunkAction<AppState> likeOrUnlike(String id) {
 ThunkAction<AppState> fetchNewFeedPage(Completer<Null> completer) {
   return (Store<AppState> store) async {
     try {
-      final entry = await AppContainer.feedApi.getMyFeedPage(store.state.feedState.lastIndex);
+      final entry = await AppContainer.feedApi.getMyFeedPage(store.state.feedState.lastIndex, store.state.feedState.createdAt);
       store.dispatch(AddFeedPageAction(entry));
     }
     finally {

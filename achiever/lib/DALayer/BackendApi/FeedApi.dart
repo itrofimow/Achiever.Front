@@ -5,10 +5,13 @@ import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
 import 'package:achiever/BLLayer/Models/Feed/CreateEntryByAchievementRequest.dart';
 import 'package:achiever/BLLayer/Models/Feed/FeedEntryComment.dart';
 import 'package:achiever/BLLayer/Models/Feed/FeedPageResponse.dart';
+import 'package:achiever/BLLayer/Models/User/UserDto.dart';
+import 'package:achiever/BLLayer/Models/User/AllUsersDto.dart';
 
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart';
+import 'package:quiver/strings.dart';
 
 class FeedApi implements IFeedApi {
   static final FeedApi _instance = FeedApi._internal();
@@ -18,26 +21,35 @@ class FeedApi implements IFeedApi {
     return _instance;
   }
 
-  Future<FeedPageResponse> getMyFeedPage(int index) async {
+  Future<FeedPageResponse> getMyFeedPage(int index, String startedAt) async {
+    var url = '/feed/one/$index';
+
     final model = await _client.makeGet<FeedPageResponse>(
-      '/feed/one/$index', 
-      (json) => FeedPageResponse.fromJson(json));
+      url, 
+      (json) => FeedPageResponse.fromJson(json),
+      params: {"startedAt": isBlank(startedAt) ? '' : startedAt});
 
     return model;
   }
 
-  Future<FeedPageResponse> getAuthorFeedEntry(int index, String authorId) async {
+  Future<FeedPageResponse> getAuthorFeedEntry(int index, String authorId, String startedAt) async {
+    var url = '/feed/authorone/$index/$authorId';
+
     final model = await _client.makeGet<FeedPageResponse>(
-      '/feed/authorone/$index/$authorId',
-      (json) => FeedPageResponse.fromJson(json));
+      url,
+      (json) => FeedPageResponse.fromJson(json),
+      params: {"startedAt": isBlank(startedAt) ? '' : startedAt});
 
     return model;
   }
 
-  Future<FeedPageResponse> getAchievementFeedPage(int index, String achievementId) async {
+  Future<FeedPageResponse> getAchievementFeedPage(int index, String achievementId, String startedAt) async {
+    var url = '/feed/achievementOne/$index/$achievementId';
+
     final model = await _client.makeGet<FeedPageResponse>(
-      '/feed/achievementOne/$index/$achievementId', 
-      (json) => FeedPageResponse.fromJson(json));
+      url,
+      (json) => FeedPageResponse.fromJson(json),
+      params: {"startedAt": isBlank(startedAt) ? '' : startedAt});
 
     return model;
   }
@@ -63,6 +75,14 @@ class FeedApi implements IFeedApi {
       (json) => FeedEntryComment.fromJson(json));
 
     return response;
+  }
+
+  Future<List<UserDto>> getLikes(String feedEntryId) async {
+    final response = await _client.makeGet<AllUsersDto>(
+      '/feed/likes/$feedEntryId', 
+      (json) => AllUsersDto.fromJson(json));
+
+    return response.allUsers;
   }
 
   FeedApi._internal() {

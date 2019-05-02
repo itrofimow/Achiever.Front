@@ -41,10 +41,13 @@ ThunkAction<AppState> fetchNewPersonalFeedPage(String authorId, Completer<Null> 
   return (Store<AppState> store) async {
     try {
       store.dispatch(LockPersonalFeedAction(authorId, isAchievementAction));
+
+      final feedByAuthor = (isAchievementAction ? store.state.achievementsFeedState : store.state.personalFeedState)
+        .feedByAuthor[authorId];
       
       final page = isAchievementAction
-        ? await AppContainer.feedApi.getAchievementFeedPage(store.state.achievementsFeedState.feedByAuthor[authorId].lastIndex, authorId)
-        : await AppContainer.feedApi.getAuthorFeedEntry(store.state.personalFeedState.feedByAuthor[authorId].lastIndex, authorId);
+        ? await AppContainer.feedApi.getAchievementFeedPage(feedByAuthor.lastIndex, authorId, feedByAuthor.createdAt)
+        : await AppContainer.feedApi.getAuthorFeedEntry(feedByAuthor.lastIndex, authorId, feedByAuthor.createdAt);
 
       store.dispatch(AddPersonalFeedPageAction(page, authorId, isAchievementAction));
     }

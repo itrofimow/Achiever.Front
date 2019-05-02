@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'package:achiever/AppContainer.dart';
+import 'package:quiver/strings.dart';
 import 'dart:async';
 
 class UserTile extends StatefulWidget {
@@ -51,22 +52,31 @@ class UserTileState extends State<UserTile> {
   }
 
   Widget _buildNicknameAndName(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(user.user.nickname, style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 14,
-          letterSpacing: 0.24,
-          color: Color.fromRGBO(51, 51, 51, 1)
-        ),),
-        Text(user.user.nickname, style: TextStyle(
+    final columnChildren = <Widget>[
+      Text(user.user.nickname, style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 14,
+        letterSpacing: 0.24,
+        color: Color.fromRGBO(51, 51, 51, 1)
+      ),),
+    ];
+    if (!isBlank(user.user.displayName)) {
+      columnChildren.add(
+        Text(user.user.displayName, style: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 14,
           letterSpacing: 0.24,
           color: Color.fromRGBO(51, 51, 51, 0.7)
         ))
-      ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: columnChildren.length == 2 
+        ? MainAxisAlignment.spaceBetween
+        : MainAxisAlignment.center,
+      children: columnChildren
     );
   }
 

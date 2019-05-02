@@ -13,12 +13,15 @@ class AchieverNavigationBar extends BottomNavigationBar {
     type: BottomNavigationBarType.fixed,
     items: [
       BottomNavigationBarItem(
-        icon: Image.asset('assets/navigation_icons/home_icon.png', color: Color.fromRGBO(0, 0, 0, 1.0),//Color.fromARGB(255, 51, 51, 51),
+        icon: Image.asset('assets/navigation_icons/home_icon.png',
           width: 24.0, height: 25.0,),
+        activeIcon: Image.asset('assets/navigation_icons/home_icon_active.png',
+          width: 24, height: 25,),
         title: Container()
       ),
       BottomNavigationBarItem(
         icon: Image.asset('assets/navigation_icons/search_icon.png', width: 23.0, height: 23.0,),
+        activeIcon: Image.asset('assets/navigation_icons/search_icon_active.png', width: 23, height: 23,),
         title: Container()
       ),
       BottomNavigationBarItem(
@@ -26,8 +29,8 @@ class AchieverNavigationBar extends BottomNavigationBar {
         title: Container()
       ),
       BottomNavigationBarItem(
-        //icon: Icon(Icons.offline_bolt),
         icon: Image.asset('assets/navigation_icons/notification_icon.png', width: 21.0, height: 23.0,),
+        activeIcon: Image.asset('assets/navigation_icons/notification_icon_active.png', width: 21, height: 23,),
         title: Container()
       ),
       BottomNavigationBarItem(

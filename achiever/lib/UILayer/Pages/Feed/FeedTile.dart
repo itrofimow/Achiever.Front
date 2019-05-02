@@ -10,6 +10,8 @@ import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:quiver/strings.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Redux/Navigation/NavigationActions.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
+import '../Profile/ExpandedStatsPage.dart';
 
 class NoScrollGlowBehavior extends ScrollBehavior {
 
@@ -35,7 +37,7 @@ class FeedTile extends StatelessWidget {
     if (!_allowNavigation) return;
 
     if (model.entry.authorId == userId)
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(NoOpacityMaterialPageRoute(
         builder: (context) => MyProfilePage(),
         settings: RouteSettings(name: 'my profile')
       ));
@@ -176,6 +178,10 @@ class FeedTile extends StatelessWidget {
         'assets/heart_blue_icon.png' : 
         'assets/heart_icon.png', width: 24.0, height: 24.0,) ,
       onTap: () => _likeOrUnlikeCallback(model.entry.id),
+      onLongPress: () => Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => ExtendedStatsPage(Future.value(model.entry.likedUsers)),
+        settings: RouteSettings(name: 'Liked')
+      )),
     );
 
     final toFeedEntryNavigator = GestureDetector(

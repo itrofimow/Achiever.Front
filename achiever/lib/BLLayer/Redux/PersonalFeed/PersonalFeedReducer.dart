@@ -20,7 +20,7 @@ PersonalFeedState _addPersonalFeedPage(PersonalFeedState state, AddPersonalFeedP
   final newFeed = PersonalFeed(
     lastIndex: oldFeed.lastIndex + 1,
     entries: newList,
-    createdAt: oldFeed.createdAt,
+    createdAt: action.page.startedAt,
     isLocked: false
   );
 

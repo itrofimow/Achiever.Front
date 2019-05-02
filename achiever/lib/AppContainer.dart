@@ -19,6 +19,9 @@ import 'DALayer/BackendApi/SocialInteractionsApi.dart';
 import 'BLLayer/ApiInterfaces/ISearchApi.dart';
 import 'DALayer/BackendApi/SearchApi.dart';
 
+import 'package:achiever/BLLayer/ApiInterfaces/IServerTimeApi.dart';
+import 'package:achiever/DALayer/BackendApi/ServerTimeApi.dart';
+
 import 'BLLayer/Services/SharedPrefsService.dart';
 
 import 'package:redux/redux.dart';
@@ -32,6 +35,7 @@ class AppContainer {
   static final IAllUsersApi allUsersApi = new AllUsersApi();
   static final ISocialIntercationsApi socialIntercationsApi = new SocialInteractionsApi();
   static final ISearchApi searchApi = new SearchApi();
+  static final IServerTimeApi serverTimeApi = new ServerTimeApi();
 
   static final SharedPrefsService sharedPrefsService = new SharedPrefsService();
 

@@ -21,12 +21,17 @@ class ExtendedStatsPage extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: snapshot.data.map((x){
-                  return UserTile(x, key: ValueKey(x.user.id));
+                  return Container(
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: UserTile(x, key: ValueKey(x.user.id))
+                  );
                 }).toList(),
               ),
             );
           }
-          else return CircularProgressIndicator();
+          else return Center(
+            child: CircularProgressIndicator()
+          );
         },
       )
     );
