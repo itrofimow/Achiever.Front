@@ -41,8 +41,8 @@ class AllAchievementsPage extends StatelessWidget {
                   margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 25.0, bottom: 25.0),
                   child: AchieverAchievement(x, 
                     MediaQuery.of(context).size.width - 16 * 2,
-                    CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
-                    CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}')
+                    CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage?.imagePath}'),
+                    CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage?.imagePath}')
                   )
                 )
               );

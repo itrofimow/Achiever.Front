@@ -97,6 +97,7 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
   Widget _buildLayout(BuildContext context, SelectedAchievementViewModel viewModel) {
     return ListView(
       padding: EdgeInsets.zero,
+      controller: _scrollController,
       children: [
         _buildHeader(context, viewModel),
         _buildStats(context, viewModel),
@@ -381,7 +382,7 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
     return Container(
       width: 112,
       height: 1.0 * viewModel.category.maskHeight,
-      color: Colors.blue,
+      color: Colors.transparent,
     );
   }
 
@@ -397,6 +398,12 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
     final size = max(renderBox.size.width, renderBox.size.height);
 
+    final widthScale = bigImageWidth / renderBox.size.width;
+    final heightScale = bigImageHeight / renderBox.size.height;
+    final minScale = min(widthScale, heightScale);
+
+    final scale = minScale < 1 ? 1 : minScale;
+
     final background = Opacity(
       opacity: 0.7,
       child: Container(
@@ -405,11 +412,11 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
         child: ClipRect(
           child: OverflowBox(
             //maxHeight: size,
-            maxHeight: bigImageHeight,
-            minHeight: bigImageHeight,//size,
+            maxHeight: bigImageHeight / scale,
+            minHeight: bigImageHeight / scale,//size,
             //maxWidth: size,
-            minWidth: bigImageWidth,
-            maxWidth: bigImageWidth,
+            minWidth: bigImageWidth / scale,
+            maxWidth: bigImageWidth / scale,
             child: Image(image: image,
               colorBlendMode: BlendMode.saturation,
               color: Color.fromARGB(255, 0, 0, 0),

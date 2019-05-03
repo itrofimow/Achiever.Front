@@ -151,8 +151,8 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
           child: GestureDetector(
             child: AchieverAchievement(x, 
               MediaQuery.of(context).size.width - 16 * 2,
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage.imagePath}'),
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}'),
+              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage?.imagePath}'),
+              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage?.imagePath}'),
               key: ValueKey(x.id),
             ),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(

@@ -27,4 +27,29 @@ class Achievement extends Object with _$AchievementSerializerMixin {
     this.category);
 
 	factory Achievement.fromJson(Map<String, dynamic> json) => _$AchievementFromJson(json);
+
+  AchievementPaintingType get paintingType {
+    if (backgroundImage != null && frontImage != null && bigImage != null)
+      return AchievementPaintingType.fullyCustom;
+
+    if (frontImage != null && bigImage != null)
+      return AchievementPaintingType.semiCustom;
+
+    return AchievementPaintingType.lazy;
+  }
+}
+
+enum AchievementPaintingType {
+  /*
+  https://trello.com/c/0rVqeGTF/
+  */
+
+  // 3 separate images - back, front, big
+  fullyCustom,
+
+  // 2 images - front, big
+  semiCustom,
+
+  // 1 image - big
+  lazy
 }
