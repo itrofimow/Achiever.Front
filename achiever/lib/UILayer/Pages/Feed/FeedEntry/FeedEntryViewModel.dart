@@ -17,7 +17,7 @@ class FeedEntryViewModel {
   static FeedEntryViewModel fromStore(Store<AppState> store, String id) {
     final state = store.state.feedState;
 
-    final entry = state.entries.firstWhere((x) => x.entry.id == id);
+    final entry = state.allKnownEntries[id];
 
     return FeedEntryViewModel(
       model: entry,

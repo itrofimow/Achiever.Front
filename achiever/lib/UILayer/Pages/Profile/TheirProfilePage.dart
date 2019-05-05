@@ -76,7 +76,11 @@ class _TheirProfilePageState extends State<TheirProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return Container(color: Colors.black,);
+    if (_isLoading) return Container(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
     return StoreBuilder<AppState>(
        builder: (innerContext, store) => _buildLayout(innerContext, store)
     );

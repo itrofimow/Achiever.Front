@@ -26,7 +26,7 @@ class FeedViewModel {
     final state = store.state.feedState;
 
     return FeedViewModel(
-      entries: state.entries,
+      entries: state.entries.map((f) => state.allKnownEntries[f]).toList(),
       userId: store.state.userState.user.id,
       getNew: () {
         store.dispatch(fetchNewFeedPage);

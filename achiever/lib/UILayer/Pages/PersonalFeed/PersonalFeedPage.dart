@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:achiever/BLLayer/Redux/PersonalFeed/PersonalFeedActions.dart';
+import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
+import '../Feed/FeedEntry/FeedEntryPage.dart';
 
 import 'dart:async';
 import 'package:achiever/AppContainer.dart';
@@ -66,9 +68,14 @@ class _PersonalFeedPageState extends State<PersonalFeedPage> {
   Widget _buildLayout(BuildContext context, PersonalFeedViewModel viewModel) {
     if (viewModel.entries.length == 0) return Container();
 
+    final _navigateFunc = (BuildContext innerContext, FeedEntryResponse innerModel) =>
+      Navigator.of(innerContext).push(MaterialPageRoute(
+        builder: (context) => FeedEntryPage(innerModel.entry.id),
+        settings: RouteSettings(name: 'feedEntry')));
+
     final listChildren = List<Widget>();
     viewModel.entries.forEach((x){
-      listChildren.add(FeedTile(x, false, (_) => {}, (_, __) => {}, widget.authorId));
+      listChildren.add(FeedTile(x, viewModel.isAchievementViewModel, viewModel.likeOrUnlikeCallback, _navigateFunc, viewModel.userId));
     });
 
     if (viewModel.isLocked)

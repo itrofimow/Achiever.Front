@@ -29,7 +29,7 @@ class PersonalFeedState {
 }
 
 class PersonalFeed {
-  final List<FeedEntryResponse> entries;
+  final List<String> entries;
   final int lastIndex;
   final String createdAt;
   bool isLocked;
@@ -42,7 +42,7 @@ class PersonalFeed {
   });
 
   PersonalFeed copyWith({
-    List<FeedEntryResponse> entries,
+    List<String> entries,
     int lastIndex,
     String createdAt,
     bool isLocked

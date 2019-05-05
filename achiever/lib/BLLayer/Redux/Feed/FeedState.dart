@@ -3,23 +3,28 @@ import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
 
 @immutable
 class FeedState {
-  final List<FeedEntryResponse> entries;
+  final Map<String, FeedEntryResponse> allKnownEntries;
+
+  final List<String> entries;
   final String createdAt;
   final int lastIndex;
 
   FeedState({
+    this.allKnownEntries,
     this.entries,
     this.createdAt,
     this.lastIndex,
   });
 
   FeedState copyWith({
-    List<FeedEntryResponse> entries,
+    Map<String, FeedEntryResponse> allKnownEntries,
+    List<String> entries,
     String createdAt,
     int lastIndex,
     String selectedEntryId
   }) {
     return FeedState(
+      allKnownEntries: allKnownEntries ?? this.allKnownEntries,
       entries: entries ?? this.entries,
       createdAt: createdAt ?? this.createdAt,
       lastIndex: lastIndex ?? this.lastIndex,
@@ -28,7 +33,8 @@ class FeedState {
 
   factory FeedState.initial() {
     return FeedState(
-      entries: List<FeedEntryResponse>(),
+      allKnownEntries: Map<String, FeedEntryResponse>(),
+      entries: List<String>(),
       createdAt: null,
       lastIndex: 0,
     );

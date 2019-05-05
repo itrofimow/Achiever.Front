@@ -15,7 +15,7 @@ PersonalFeedState _addPersonalFeedPage(PersonalFeedState state, AddPersonalFeedP
   final oldFeed = state.feedByAuthor[action.authourId];
 
   final newList = oldFeed.entries;
-  newList.addAll(action.page.entries);
+  newList.addAll(action.page.entries.map((f) => f.entry.id));
 
   final newFeed = PersonalFeed(
     lastIndex: oldFeed.lastIndex + 1,
