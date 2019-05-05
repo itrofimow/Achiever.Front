@@ -10,6 +10,8 @@ import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import 'package:achiever/BLLayer/Models/Achievement/ImageInfo.dart' as achiever;
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
+import 'package:achiever/UILayer/UIKit/Achievement/AchieverAchievement.dart';
+import 'package:achiever/AppContainer.dart';
 
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -31,9 +33,9 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
   final _titleController = TextEditingController(text: 'Название');
   final _descriptionController = TextEditingController(text: 'Описание');
 
-  File _bigImage;
-  int _imageWidth;
-  int _imageHeight;
+  bool submitting = false;
+
+  _TmpImageInfo _bigImageInfo = _TmpImageInfo(), _frontImageInfo = _TmpImageInfo(), _backImageInfo = _TmpImageInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -54,26 +56,45 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildFitted(context, _buildTitleAndDescription(context)),
-          _buildFitted(context, Container(
-            margin: EdgeInsets.only(top: 40),
-            child: _buildImageBox(context),
-          )),
-          _buildFakedSelectedAchievementPage(context),    
+          Container(height: 10,),
+          _buildFitted(context, _buildImageBox(context, _bigImageInfo, 'Большая фотка')),
+          _buildFitted(context, _buildImageBox(context, _frontImageInfo, 'Маленькая фотка')),
+          _buildFitted(context, _buildImageBox(context, _backImageInfo, 'Широкий задник')),
+          _buildFitted(context, _buildFakedAchievementTile(context)),
+          _buildFakedSelectedAchievementPage(context),
           _buildFitted(context, _buildSubmitButton(context))
         ]
       ),
     );
   }
 
+  Widget _buildFakedAchievementTile(BuildContext context) {
+    final achievement = _getFakedAchievement();
+
+    var content = achievement.paintingType == AchievementPaintingType.unknown
+      ? Container(
+        height: 150,
+        color: Colors.blue,)
+      : AchieverAchievement(achievement, 123, null, null,
+        key: UniqueKey(), useFileImages: true,);
+
+    return Container(
+      margin: EdgeInsets.only(top: 16, bottom: 16),
+      child: content,
+    );
+  }
+
   Widget _buildFakedSelectedAchievementPage(BuildContext context) {
-    if (_bigImage == null) return Container(
+    final achievement = _getFakedAchievement();
+
+    if (achievement.paintingType == AchievementPaintingType.unknown) return Container(
       height: 500,
       color: Colors.blue,
     );
 
     final fakedViewModel = SelectedAchievementViewModel(
       category: widget.category,
-      achievement: _getFakedAchievement()
+      achievement: achievement
     );
 
     return ConstrainedBox(
@@ -107,44 +128,49 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
     );
   }
 
-  Widget _buildImageBox(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      child: Row(
-        children: [
-          Container(
-            height: 96, width: 96,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 242, 242, 242),
-              borderRadius: BorderRadius.circular(8),
+  Widget _buildImageBox(BuildContext context, _TmpImageInfo imageInfo, String title) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          children: [
+            Container(
+              height: 96, width: 96,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 242, 242, 242),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset('assets/add_photo_icon.png', width: 48, height: 33,)
             ),
-            child: Image.asset('assets/add_photo_icon.png', width: 48, height: 33,)
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16),
-            child: Text('Большая фотка', style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 17,
-              letterSpacing: -0.41,
-              color: Color.fromRGBO(51, 51, 51, 0.5)
-            )),
-          )
-        ]
-      ),
-      onTap: () => _setBigImage(),
+            Container(
+              margin: EdgeInsets.only(left: 16),
+              child: Text(title, style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 17,
+                letterSpacing: -0.41,
+                color: Color.fromRGBO(51, 51, 51, 0.5)
+              )),
+            )
+          ]
+        ),
+        onTap: () => _setImage(imageInfo),
+      )
     );
   }
 
   Widget _buildSubmitButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 36),
-      child: AchieverButton.createDefault(Text('Добавить в Achiever', style: TextStyle(
+      child: AchieverButton.createDefault(Text(submitting ? 'Создаем...' : 'Добавить в Achiever', style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 15,
         letterSpacing: 0.26,
         color: Colors.white
-      )), () => {print('ololo')}),
+      )), submitting 
+        ? () => {print('ololo')} 
+        : () => _submitAchievement()),
     );
   }
 
@@ -157,9 +183,33 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
 
   Achievement _getFakedAchievement() {
     return Achievement('fake_id_123', _titleController.text, _descriptionController.text, 
-      null, null, 
-      achiever.ImageInfo(_bigImage.path, _imageWidth, _imageHeight), 
-      null, null, false, null, widget.category);
+      null, null,
+      _getImageInfo(_bigImageInfo),
+      _getImageInfo(_backImageInfo),
+      _getImageInfo(_frontImageInfo),
+      false, null, widget.category);
+  }
+
+  Future _submitAchievement() async {
+    setState(() {
+      submitting = true;
+    });
+    try {
+      await AppContainer.achievementApi.createAchievement(_getFakedAchievement());
+    }
+    finally {
+      if (mounted)
+        setState(() {
+          submitting = false;
+        });
+    }
+  }
+
+  achiever.ImageInfo _getImageInfo(_TmpImageInfo imageInfo) {
+    if (imageInfo.filePath == null) return null;
+
+    return achiever.ImageInfo(imageInfo.filePath, 
+      imageInfo.width, imageInfo.height);
   }
 
   Future<File> _pickAndCrop() async {
@@ -183,20 +233,26 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
     return await completer.future;
   }
 
-  Future _setBigImage() async {
+  Future _setImage(_TmpImageInfo imageInfo) async {
     final file = await _pickAndCrop();
 
     if (file == null) return;
     
     final image = await _getImageDimensions(file);
 
+    imageInfo.filePath = file.path;
+    imageInfo.height = image.height;
+    imageInfo.width = image.width;
+
     if (mounted)
-      setState(() {
-          _bigImage = file;
-          _imageWidth = image.width;
-          _imageHeight = image.height;
-        });
+      setState(() {});
   }
+}
+
+class _TmpImageInfo {
+  String filePath;
+  int width;
+  int height;
 }
 
 class _AchievementApiMock extends IAchievementApi {
@@ -210,7 +266,7 @@ class _AchievementApiMock extends IAchievementApi {
 
   Future<List<UserDto>> getFollowingsWhoHave(String achievementId) => Future.value([]);
 
-  Future createAchievement(Achievement model, File backgroundImage, File foregroundImage) => Future<Null>(null);
+  Future createAchievement(Achievement model) => Future<Null>(null);
 
   Future<List<AchievementCategory>> getAllCategories() => Future.value(null);
 

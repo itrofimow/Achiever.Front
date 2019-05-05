@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'dart:ui' as ui;
+import 'dart:io';
 import 'dart:async';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/UILayer/UIKit/BlendPainter.dart';
@@ -12,12 +13,16 @@ part 'LazyAchievementState.dart';
 class AchieverAchievement extends StatefulWidget {
   final Achievement model;
   final double width;
+  bool useFileImages;
   
   final ImageProvider<dynamic> backgroundImage;
   final ImageProvider<dynamic> foregroundImage;
   
   AchieverAchievement(this.model, this.width,
-    this.backgroundImage, this.foregroundImage, {Key key}) : super(key: key);
+    this.backgroundImage, this.foregroundImage, {Key key, bool useFileImages}) : super(key: key){
+      if (useFileImages == null) this.useFileImages = false;
+      else this.useFileImages = useFileImages;
+    }
 
   @override
   State<AchieverAchievement> createState() {
@@ -158,7 +163,9 @@ class _AchievementState extends State<AchieverAchievement> {
       (renderBox.size.width / resultImage.width);
 
     final foregroundImage = Image(
-      image: NetworkImage('${ApiClient.staticUrl}/${resultImage.imagePath}'),
+      image: widget.useFileImages
+        ? FileImage(File(resultImage.imagePath))
+        : NetworkImage('${ApiClient.staticUrl}/${resultImage.imagePath}'),
       width: renderBox.size.width,
       color: paintingType != AchievementPaintingType.fullyCustom 
         ? Color.fromARGB(255, 0, 0, 0)
@@ -204,9 +211,11 @@ class _AchievementState extends State<AchieverAchievement> {
     final mask = NetworkImage('${ApiClient.staticUrl}/${widget.model.category.maskImagePath}');
 
     final imageUrl = paintingType == AchievementPaintingType.lazy 
-      ? '${ApiClient.staticUrl}/${widget.model.bigImage.imagePath}'
-      : '${ApiClient.staticUrl}/${widget.model.frontImage.imagePath}';
-    final foregroundImage = NetworkImage(imageUrl);
+      ? widget.model.bigImage.imagePath
+      : widget.model.frontImage.imagePath;
+    final foregroundImage = widget.useFileImages 
+      ? FileImage(File(imageUrl))
+      : NetworkImage('${ApiClient.staticUrl}/$imageUrl');
 
     _resolveImage(mask).then((val){
       preparedMaskImage = val;

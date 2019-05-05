@@ -35,7 +35,10 @@ class Achievement extends Object with _$AchievementSerializerMixin {
     if (frontImage != null && bigImage != null)
       return AchievementPaintingType.semiCustom;
 
-    return AchievementPaintingType.lazy;
+    if (bigImage != null)
+      return AchievementPaintingType.lazy;
+
+    return AchievementPaintingType.unknown;
   }
 }
 
@@ -51,5 +54,8 @@ enum AchievementPaintingType {
   semiCustom,
 
   // 1 image - big
-  lazy
+  lazy,
+
+  // something idk
+  unknown
 }

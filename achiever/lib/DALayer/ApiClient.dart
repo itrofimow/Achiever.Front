@@ -5,7 +5,7 @@ import 'package:achiever/BLLayer/Models/AchieverJsonable.dart';
 class ApiClient {
   static final ApiClient _instance = new ApiClient._internal();
 
-  static const String baseUrl = 'http://192.168.0.16:1337/';//'https://achiever.gg/';//'http://192.168.43.192:1337/';
+  static const String baseUrl = 'https://achiever.gg/';//'http://192.168.43.192:1337/';
   static final String staticUrl = baseUrl + 'images';
 
   Dio _client;

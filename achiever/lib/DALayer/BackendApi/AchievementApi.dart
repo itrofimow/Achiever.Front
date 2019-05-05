@@ -64,12 +64,21 @@ class AchievementApi implements IAchievementApi {
     return data.allUsers;
   }
 
-  Future createAchievement(Achievement model, File backgroundImage, File foregroundImage) async {
+  Future createAchievement(Achievement model) async {
     final data = FormData.from({
       'title': model.title,
       'description': model.description,
-      'backgroundImage': new UploadFileInfo(backgroundImage, basename(backgroundImage.path)),
-      'frontImage': new UploadFileInfo(foregroundImage, basename(foregroundImage.path))
+      'categoryId': model.category.id,
+
+      'backgroundImage': model.backgroundImage.imagePath == null 
+        ? null
+        : UploadFileInfo(File(model.backgroundImage.imagePath), 'we'),
+      'frontImage': model.frontImage.imagePath == null 
+        ? null
+        : UploadFileInfo(File(model.frontImage.imagePath), 'we'),
+      'bigImage': model.bigImage.imagePath == null
+        ? null
+        : UploadFileInfo(File(model.bigImage.imagePath), 'we')
     });
 
     await _client.postFormData('/achievement', data);

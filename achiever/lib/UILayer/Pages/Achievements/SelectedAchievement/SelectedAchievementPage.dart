@@ -13,6 +13,7 @@ import 'package:achiever/BLLayer/ApiInterfaces/IAchievementApi.dart';
 import '../../PersonalFeed/PersonalFeedPage.dart';
 import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
+import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 
 import 'dart:ui' as ui;
 import 'dart:io';
@@ -38,7 +39,7 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
   ui.Image preparedForegroundImage;
   ui.Image preparedMaskImage;
 
-  ImageProvider<dynamic> image, mask;
+  ImageProvider<dynamic> image, backImage, mask;
   double bigImageWidth, bigImageHeight;
 
   Widget backgroundWidget;
@@ -74,7 +75,9 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
       });
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _calculateBackgroundDecoration());
+    if (widget.fakedViewModel != null)
+      WidgetsBinding.instance.addPostFrameCallback((_) => 
+        _calculateBackgroundDecoration(widget.fakedViewModel.achievement.paintingType));
 
     super.initState();
   }
@@ -84,26 +87,35 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
     if (widget.fakedViewModel == null) {
       return Scaffold(
         body: StoreConnector<AppState, SelectedAchievementViewModel>(
-          onInit: (store) => _initResolve(store),
+          onInit: (store) {
+            _initResolve(store);
+            WidgetsBinding.instance.addPostFrameCallback((_) => 
+              _calculateBackgroundDecoration(
+                SelectedAchievementViewModel.fromStore(store, widget.achievementId).achievement.paintingType)
+              );
+          },
           converter: (store) => SelectedAchievementViewModel.fromStore(store, widget.achievementId),
-          builder: (context, viewModel) => _buildLayout(context, viewModel),
+          builder: (context, viewModel) => _buildLayout(context, viewModel, true),
         )
       );
     }
 
-    return _buildLayout(context, widget.fakedViewModel);
+    return _buildLayout(context, widget.fakedViewModel, false);
   }
 
-  Widget _buildLayout(BuildContext context, SelectedAchievementViewModel viewModel) {
+  Widget _buildLayout(BuildContext context, SelectedAchievementViewModel viewModel, bool includeFeed) {
+    final listChildren = [
+      _buildHeader(context, viewModel),
+        _buildStats(context, viewModel),
+        _buildDivider(context),
+    ];
+    if (includeFeed)
+      listChildren.add(PersonalFeedPage(true, widget.achievementId, _scrollController));
+
     return ListView(
       padding: EdgeInsets.zero,
       controller: _scrollController,
-      children: [
-        _buildHeader(context, viewModel),
-        _buildStats(context, viewModel),
-        _buildDivider(context),
-        PersonalFeedPage(true, widget.achievementId, _scrollController),
-      ]
+      children: listChildren
     );
   }
 
@@ -393,7 +405,7 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
     );
   }
 
-  void _calculateBackgroundDecoration() {
+  void _calculateBackgroundDecoration(AchievementPaintingType paintingType) {
     final RenderBox renderBox = foregroundLayoutKey.currentContext.findRenderObject();
 
     final size = max(renderBox.size.width, renderBox.size.height);
@@ -404,29 +416,36 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
     final scale = minScale < 1 ? 1 : minScale;
 
-    final background = Opacity(
-      opacity: 0.7,
-      child: Container(
-        width: renderBox.size.width,
-        height: renderBox.size.height,
-        child: ClipRect(
-          child: OverflowBox(
-            //maxHeight: size,
-            maxHeight: bigImageHeight / scale,
-            minHeight: bigImageHeight / scale,//size,
-            //maxWidth: size,
-            minWidth: bigImageWidth / scale,
-            maxWidth: bigImageWidth / scale,
-            child: Image(image: image,
-              colorBlendMode: BlendMode.saturation,
-              color: Color.fromARGB(255, 0, 0, 0),
-              width: size,
-              //height: size,
-            ),
+    final content = Container(
+      width: renderBox.size.width,
+      height: renderBox.size.height,
+      child: ClipRect(
+        child: OverflowBox(
+          //maxHeight: size,
+          maxHeight: bigImageHeight / scale,
+          minHeight: bigImageHeight / scale,//size,
+          //maxWidth: size,
+          minWidth: bigImageWidth / scale,
+          maxWidth: bigImageWidth / scale,
+          child: Image(image: backImage,
+            colorBlendMode: paintingType == AchievementPaintingType.lazy 
+              ? BlendMode.saturation
+              : null,
+            color: paintingType == AchievementPaintingType.lazy
+              ? Color.fromARGB(255, 0, 0, 0)
+              : null,
+            width: size,
+            //height: size,
           ),
-        )
+        ),
       )
-    );
+    ); 
+
+    final background = paintingType == AchievementPaintingType.lazy 
+      ? Opacity(
+        opacity: 0.7,
+        child: content)
+      : content;
 
     if (mounted)
       setState(() {
@@ -451,9 +470,22 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
       : FileImage(File(fakedViewModel.achievement.bigImage.imagePath));*/
 
     mask = NetworkImage('${ApiClient.staticUrl}/${viewModel.category.maskImagePath}');
+
+    final achievement = fakedViewModel == null 
+      ? viewModel.achievement
+      : fakedViewModel.achievement;
+
+    final imageUrl = achievement.paintingType == AchievementPaintingType.lazy
+      ? achievement.bigImage.imagePath
+      : achievement.frontImage.imagePath;
+
     image = fakedViewModel == null 
-      ? NetworkImage('${ApiClient.staticUrl}/${viewModel.achievement.bigImage.imagePath}')
-      : FileImage(File(fakedViewModel.achievement.bigImage.imagePath));
+      ? NetworkImage('${ApiClient.staticUrl}/$imageUrl')
+      : FileImage(File(imageUrl));
+
+    backImage = fakedViewModel == null
+      ? NetworkImage('${ApiClient.staticUrl}/${achievement.bigImage.imagePath}')
+      : FileImage(File(achievement.bigImage.imagePath));
 
     bigImageWidth = 1.0 * viewModel.achievement.bigImage.width;
     bigImageHeight = 1.0 * viewModel.achievement.bigImage.height;

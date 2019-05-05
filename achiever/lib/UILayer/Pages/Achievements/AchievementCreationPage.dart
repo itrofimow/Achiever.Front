@@ -117,8 +117,7 @@ class _AchievementCreationPageState extends State<AchievementCreationPage> {
   Future _submit() async {
     try {
       await _achievementApi.createAchievement(
-        Achievement('we', _title, _description, 'we', 'we', null, null, null, false, null, null), 
-        _backgroundImageFile, _frontImageFile);
+        Achievement('we', _title, _description, 'we', 'we', null, null, null, false, null, null));
     }
     catch(e) {
       

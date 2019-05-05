@@ -15,7 +15,7 @@ abstract class IAchievementApi {
 
   Future<List<UserDto>> getFollowingsWhoHave(String achievementId);
 
-  Future createAchievement(Achievement model, File backgroundImage, File foregroundImage);
+  Future createAchievement(Achievement model);
 
   Future<List<AchievementCategory>> getAllCategories();
 
