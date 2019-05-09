@@ -22,6 +22,7 @@ class SearchResultPage extends StatefulWidget {
 
 class SearchResultPageState extends State<SearchResultPage> {
   final TextEditingController _controller = TextEditingController();
+  bool focusRequested = false;
 
   List<Achievement> _achievements = List<Achievement>();
   List<UserDto> _users = List<UserDto>();
@@ -30,6 +31,13 @@ class SearchResultPageState extends State<SearchResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!focusRequested) {
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        FocusScope.of(context).requestFocus(_dummyFocusNode);
+        focusRequested = true;
+      });
+    }
+
     return StoreConnector<AppState, AchievementCategoriesViewModel>(
       converter: (store) => AchievementCategoriesViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel),
@@ -62,7 +70,7 @@ class SearchResultPageState extends State<SearchResultPage> {
 
   Widget _buildSearchBox(BuildContext context, AchievementCategoriesViewModel viewModel) {
     return TextField(
-      autofocus: true,
+      focusNode: _dummyFocusNode,
       controller: _controller,
       textInputAction: TextInputAction.search,
       onSubmitted: (val) => _processSearch(val),
@@ -103,7 +111,8 @@ class SearchResultPageState extends State<SearchResultPage> {
               key: ValueKey(x.id),
             ),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => SelectedAchievementPage(x.id))),
+              builder: (_) => SelectedAchievementPage(x.id),
+              settings: RouteSettings(name: 'selectedAchievement'))),
           ),
         )
       );

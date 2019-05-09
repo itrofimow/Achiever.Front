@@ -9,11 +9,11 @@ class NoOpacityMaterialPageRoute extends MaterialPageRoute {
     bool fullscreenDialog = false,
   }) : super(builder: builder, settings: settings, maintainState: maintainState, fullscreenDialog: fullscreenDialog);
   
-  /*@override
+  @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    if (settings.isInitialRoute)
+    //if (settings.isInitialRoute)
       return child;
     
-    return FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child,);
-  }*/
+    //return FadeTransition(opacity: Tween<double>(begin: 0, end: 1).animate(animation), child: child,);
+  }
 }

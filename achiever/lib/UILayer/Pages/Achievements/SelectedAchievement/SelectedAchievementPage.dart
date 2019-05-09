@@ -14,6 +14,8 @@ import '../../PersonalFeed/PersonalFeedPage.dart';
 import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
+import 'package:achiever/UILayer/Pages/Profile/ExpandedStatsPage.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 import 'dart:ui' as ui;
 import 'dart:io';
@@ -185,7 +187,10 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
               children: profileImagesList
             )
           ),
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
+            builder: (_) => ExtendedStatsPage(Future.value(followingsWhoHave)),
+            settings: RouteSettings(name: 'have')
+          )),
         )
     );
   }

@@ -5,7 +5,7 @@ import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
-import 'package:achiever/AppContainer.dart';
+import 'package:achiever/NavigationHelper.dart';
 import 'package:quiver/strings.dart';
 import 'dart:async';
 
@@ -34,15 +34,29 @@ class UserTileState extends State<UserTile> {
       height: 36,
       child: Row(
         children: <Widget>[
-          _buildProfileImage(context),
-          Container(
-            margin: EdgeInsets.only(left: 12),
-            child: _buildNicknameAndName(context),
-          ),
+          _buildProfileInfo(context),
           Expanded(child: Container()),
           _buildIcon(context)
         ],
       ),
+    );
+  }
+
+  Widget _buildProfileInfo(BuildContext context) {
+    final content = Row(
+      children: <Widget>[
+        _buildProfileImage(context),
+        Container(
+          margin: EdgeInsets.only(left: 12),
+          child: _buildNicknameAndName(context),
+        )
+      ],
+    );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      child: content,
+      onTap: () => NavigationHelper.userNavigateFunc(user.user.id, user.user.nickname, context),
     );
   }
 
@@ -81,6 +95,9 @@ class UserTileState extends State<UserTile> {
   }
 
   Widget _buildIcon(BuildContext context) {
+    if (AppContainer.store.state.userState.user.id == user.user.id)
+      return Container();
+
     return Container(
       width: 36,
       height: 36,
