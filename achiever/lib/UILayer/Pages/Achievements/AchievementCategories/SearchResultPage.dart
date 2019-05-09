@@ -10,9 +10,8 @@ import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/Search/SearchRequest.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/UILayer/UIKit/User/UserTile.dart';
-import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
 import '../SelectedAchievement/SelectedAchievementPage.dart';
-import 'package:achiever/BLLayer/Redux/Keys.dart';
+import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
 class SearchResultPage extends StatefulWidget {
 
@@ -157,6 +156,8 @@ class SearchResultPageState extends State<SearchResultPage> {
 
   void _processSearch(String query) {
     AppContainer.searchApi.search(SearchRequest(query)).then((data){
+      AppContainer.store.dispatch(AddManyKnownUsersAction(data.users));
+      
       if (mounted)
         setState(() {
           _achievements = data.achievements;

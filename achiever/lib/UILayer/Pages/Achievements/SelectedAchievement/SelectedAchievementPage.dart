@@ -14,8 +14,9 @@ import '../../PersonalFeed/PersonalFeedPage.dart';
 import 'package:achiever/BLLayer/Models/Achievement/AcquiredAtDto.dart';
 import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
-import 'package:achiever/UILayer/Pages/Profile/ExpandedStatsPage.dart';
+import 'package:achiever/UILayer/Pages/Profile/ExtendedStatsPage.dart';
 import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
+import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
 import 'dart:ui' as ui;
 import 'dart:io';
@@ -62,6 +63,8 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
 
     api.getFollowingsWhoHave(widget.achievementId).then((val){
       followingsWhoHave = val;
+      AppContainer.store.dispatch(AddManyKnownUsersAction(followingsWhoHave));
+
       if (mounted)
         setState(() {
           

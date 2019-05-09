@@ -5,7 +5,7 @@ import 'package:achiever/UILayer/UIKit/Images/AchieverImage.dart';
 import 'package:achiever/UILayer/UIKit/Achievement/AchieverAchievement.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:quiver/strings.dart';
-import '../Profile/ExpandedStatsPage.dart';
+import '../Profile/ExtendedStatsPage.dart';
 import 'package:achiever/NavigationHelper.dart';
 import 'package:achiever/UILayer/Pages/Achievements/SelectedAchievement/SelectedAchievementPage.dart';
 

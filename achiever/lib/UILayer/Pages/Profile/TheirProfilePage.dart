@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/User/User.dart';
 import './ProfileBuilder.dart';
-import 'MyProfile/MyProfilePage.dart';
 import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -10,7 +9,7 @@ import '../PersonalFeed/PersonalFeedPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
-import 'ExpandedStatsPage.dart';
+import 'ExtendedStatsPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'dart:async';
 
@@ -65,9 +64,17 @@ class _TheirProfilePageState extends State<TheirProfilePage> {
         });
     _userApi.getById(widget.userId).then((data){
       model = data;
-      setState(() {
-              _isLoading = false;
-            });
+      AppContainer.store.dispatch(AddKnownUserAction(
+        UserDto(
+          model, 
+          AppContainer.store.state.userState.followings.contains(model.id))
+        )
+      );
+
+      if (mounted)
+        setState(() {
+          _isLoading = false;
+        });
     })
     .catchError((e) {
 

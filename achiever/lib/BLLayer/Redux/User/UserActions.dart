@@ -77,6 +77,12 @@ class AddKnownUserAction {
   AddKnownUserAction(this.user);
 }
 
+class AddManyKnownUsersAction {
+  final List<UserDto> users;
+
+  AddManyKnownUsersAction(this.users);
+}
+
 ThunkAction<AppState> logout = (Store<AppState> store) async {
   await AppContainer.sharedPrefsService.setToken('');
 

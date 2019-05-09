@@ -100,6 +100,7 @@ class _FeedPageState extends State<FeedPage> {
           return viewModel.resetFeed();
         },
         child: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           //cacheExtent: MediaQuery.of(context).size.height * 2,
           children: listChildren,

@@ -21,7 +21,8 @@ final userReducer = combineReducers<UserState>([
   TypedReducer<UserState, FollowUserAction>(_followUser),
   TypedReducer<UserState, UnfollowUserAction>(_unfollowUser),
 
-  TypedReducer<UserState, AddKnownUserAction>(_addKnownUser)
+  TypedReducer<UserState, AddKnownUserAction>(_addKnownUser),
+  TypedReducer<UserState, AddManyKnownUsersAction>(_addManyKnownUsers),
 ]);
 
 UserState _updateToken(UserState state, UpdateTokenAction action) =>
@@ -87,6 +88,13 @@ UserState _unfollowUser(UserState state, UnfollowUserAction action) {
 UserState _addKnownUser(UserState state, AddKnownUserAction action) {
   final knownUsers = Map<String, UserDto>.from(state.knownUsers);
   knownUsers[action.user.user.id] = action.user;
+
+  return state.copyWith(knownUsers: knownUsers);
+}
+
+UserState _addManyKnownUsers(UserState state, AddManyKnownUsersAction action) {
+  final knownUsers = Map<String, UserDto>.from(state.knownUsers);
+  action.users.forEach((f) => knownUsers[f.user.id] = f);
 
   return state.copyWith(knownUsers: knownUsers);
 }

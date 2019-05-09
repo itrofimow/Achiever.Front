@@ -24,10 +24,13 @@ import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/User/User.dart';
 
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
-import '../ExpandedStatsPage.dart';
+import '../ExtendedStatsPage.dart';
 
 import '../../PersonalFeed/PersonalFeedPage.dart';
 import 'dart:async';
+
+import 'package:achiever/AppContainer.dart';
+import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
 import '../ProfileBuilder.dart';
 
@@ -58,6 +61,8 @@ class MyProfilePageState extends State<MyProfilePage> {
       onInit: (store) {
         final initViewModel = MyProfileViewModel.fromStore(store);
         fetchEntriesCount(initViewModel.user.id);
+        AppContainer.store.dispatch(AddManyKnownUsersAction(initViewModel.followers));
+        AppContainer.store.dispatch(AddManyKnownUsersAction(initViewModel.followings));
       },
       converter: (store) => MyProfileViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel)
