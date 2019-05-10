@@ -12,6 +12,7 @@ import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'package:achiever/UILayer/UIKit/User/UserTile.dart';
 import '../SelectedAchievement/SelectedAchievementPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
+import 'package:flutter/services.dart';
 
 class SearchResultPage extends StatefulWidget {
 
@@ -26,13 +27,18 @@ class SearchResultPageState extends State<SearchResultPage> {
   List<Achievement> _achievements = List<Achievement>();
   List<UserDto> _users = List<UserDto>();
 
+  final _searchFocusNode = FocusNode();
   final _dummyFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     if (!focusRequested) {
       WidgetsBinding.instance.addPostFrameCallback((_){
-        FocusScope.of(context).requestFocus(_dummyFocusNode);
+        if (mounted) {
+          FocusScope.of(context).requestFocus(_searchFocusNode);
+          SystemChannels.textInput.invokeMethod('TextInput.show');
+        }
+
         focusRequested = true;
       });
     }
@@ -69,7 +75,7 @@ class SearchResultPageState extends State<SearchResultPage> {
 
   Widget _buildSearchBox(BuildContext context, AchievementCategoriesViewModel viewModel) {
     return TextField(
-      focusNode: _dummyFocusNode,
+      focusNode: _searchFocusNode,
       controller: _controller,
       textInputAction: TextInputAction.search,
       onSubmitted: (val) => _processSearch(val),
@@ -78,6 +84,7 @@ class SearchResultPageState extends State<SearchResultPage> {
           icon: Icon(Icons.cancel),
           onPressed: () {
             _controller.text = '';
+            FocusScope.of(context).requestFocus(_dummyFocusNode);
           }
         ),
       )
@@ -157,7 +164,7 @@ class SearchResultPageState extends State<SearchResultPage> {
   void _processSearch(String query) {
     AppContainer.searchApi.search(SearchRequest(query)).then((data){
       AppContainer.store.dispatch(AddManyKnownUsersAction(data.users));
-      
+
       if (mounted)
         setState(() {
           _achievements = data.achievements;
