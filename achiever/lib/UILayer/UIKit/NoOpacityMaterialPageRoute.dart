@@ -40,8 +40,9 @@ class NoOpacityMaterialPageRoute extends MaterialPageRoute {
 
   @override
   Duration get transitionDuration {
+    //return super.transitionDuration;
     return Platform.isAndroid 
-      ? const Duration()
+      ? const Duration(milliseconds: 16)
       : super.transitionDuration;
   }
 }
