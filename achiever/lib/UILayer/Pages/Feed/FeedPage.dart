@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/UILayer/Pages/Feed/FeedTile.dart';
-import 'package:achiever/UILayer/UXKit/KeepAliveFutureBuilder.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
 
 import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:achiever/BLLayer/Redux/Feed/FeedActions.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'FeedEntry/FeedEntryPage.dart';
 import 'FeedViewModel.dart';
-import 'package:achiever/DALayer/ApiClient.dart';
-
-import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
-import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'dart:async';
 
 class FeedPage extends StatefulWidget {
@@ -71,7 +66,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Widget _buildLayout(BuildContext context, FeedViewModel viewModel) {
     final _navigateFunc = (BuildContext innerContext, FeedEntryResponse innerModel) =>
-      Navigator.of(innerContext).push(MaterialPageRoute(
+      Navigator.of(innerContext).push(NoOpacityMaterialPageRoute(
         builder: (context) => FeedEntryPage(innerModel.entry.id),
         settings: RouteSettings(name: 'feedEntry')));
 

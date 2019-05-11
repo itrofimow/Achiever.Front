@@ -26,7 +26,10 @@ class ExtendedStatsPageState extends State<ExtendedStatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildLayout(context);
+    return Container(
+      color: Colors.white,
+      child: _buildLayout(context)
+    );
   }
 
   Widget _buildLayout(BuildContext context) {

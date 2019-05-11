@@ -70,13 +70,13 @@ class AchievementApi implements IAchievementApi {
       'description': model.description,
       'categoryId': model.category.id,
 
-      'backgroundImage': model.backgroundImage.imagePath == null 
+      'backgroundImage': model.backgroundImage?.imagePath == null 
         ? null
         : UploadFileInfo(File(model.backgroundImage.imagePath), 'we'),
-      'frontImage': model.frontImage.imagePath == null 
+      'frontImage': model.frontImage?.imagePath == null 
         ? null
         : UploadFileInfo(File(model.frontImage.imagePath), 'we'),
-      'bigImage': model.bigImage.imagePath == null
+      'bigImage': model.bigImage?.imagePath == null
         ? null
         : UploadFileInfo(File(model.bigImage.imagePath), 'we')
     });

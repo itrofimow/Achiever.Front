@@ -13,6 +13,7 @@ import '../User/Draft/DraftActions.dart';
 import 'package:achiever/BLLayer/Redux/Keys.dart';
 import '../Feed/FeedActions.dart';
 
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:achiever/UILayer/Main/MainAppPage.dart';
 
@@ -37,7 +38,7 @@ ThunkAction<AppState> validateLoginAction = (Store<AppState> store) async {
   store.dispatch(ResetFeedAction());
 
   Keys.baseNavigatorKey.currentState.pushAndRemoveUntil(
-    MaterialPageRoute(
+    NoOpacityMaterialPageRoute(
       builder: (_) => MainAppPage()
     ), (_) => false);
 };

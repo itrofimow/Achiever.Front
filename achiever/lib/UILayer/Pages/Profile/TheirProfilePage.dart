@@ -11,6 +11,7 @@ import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import 'ExtendedStatsPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import 'dart:async';
 
 class TheirProfilePage extends StatefulWidget {
@@ -219,7 +220,7 @@ class _TheirProfilePageState extends State<TheirProfilePage> {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               child: ProfileBuilder.buildStatsBlock(context, user.stats.followers, 'Подписчиков'),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
                 builder: (innerContext) => ExtendedStatsPage(_getFollowersFuture, key: ObjectKey(_getFollowersFuture),),
                 settings: RouteSettings(name: 'followers')
               )),
@@ -230,7 +231,7 @@ class _TheirProfilePageState extends State<TheirProfilePage> {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               child: ProfileBuilder.buildStatsBlock(context, user.stats.following, 'Подписок'),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
                 builder: (_) => ExtendedStatsPage(_getFollowingsFuture, key: ObjectKey(_getFollowingsFuture),),
                 settings: RouteSettings(name: 'followings')
               )),

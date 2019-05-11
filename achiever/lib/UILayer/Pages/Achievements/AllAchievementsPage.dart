@@ -7,6 +7,7 @@ import 'package:achiever/UILayer/Pages/Feed/EntryCreationPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/BLLayer/Redux/Achievements/AllAchievementsActions.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import 'dart:async';
 
 class AllAchievementsPage extends StatelessWidget {
@@ -33,7 +34,7 @@ class AllAchievementsPage extends StatelessWidget {
           child: ListView(
             children: viewModel.allAchievements.map((x) {
               return new GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
                   builder: (context) => EntryCreationPage(x.id), 
                   settings: RouteSettings(name: 'entryCreation'))),
                 child: new Container(

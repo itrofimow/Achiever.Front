@@ -6,6 +6,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:achiever/BLLayer/Redux/PersonalFeed/PersonalFeedActions.dart';
 import 'package:achiever/BLLayer/Models/Feed/FeedEntryResponse.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import '../Feed/FeedEntry/FeedEntryPage.dart';
 
 import 'dart:async';
@@ -69,7 +70,7 @@ class _PersonalFeedPageState extends State<PersonalFeedPage> {
     if (viewModel.entries.length == 0) return Container();
 
     final _navigateFunc = (BuildContext innerContext, FeedEntryResponse innerModel) =>
-      Navigator.of(innerContext).push(MaterialPageRoute(
+      Navigator.of(innerContext).push(NoOpacityMaterialPageRoute(
         builder: (context) => FeedEntryPage(innerModel.entry.id),
         settings: RouteSettings(name: 'feedEntry')));
 

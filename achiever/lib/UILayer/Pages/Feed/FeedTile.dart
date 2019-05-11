@@ -8,6 +8,7 @@ import 'package:quiver/strings.dart';
 import '../Profile/ExtendedStatsPage.dart';
 import 'package:achiever/NavigationHelper.dart';
 import 'package:achiever/UILayer/Pages/Achievements/SelectedAchievement/SelectedAchievementPage.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 class NoScrollGlowBehavior extends ScrollBehavior {
 
@@ -99,7 +100,7 @@ class FeedTile extends StatelessWidget {
           CachedNetworkImageProvider(ApiClient.staticUrl + '/' + model.entry.achievement.backgroundImage.imagePath),
           CachedNetworkImageProvider(ApiClient.staticUrl + '/' + model.entry.achievement.frontImage.imagePath)
         ),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+        onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
           builder: (_) => SelectedAchievementPage(model.entry.achievementId),
           settings: RouteSettings(name: 'selectedAchievement')
         )),
@@ -171,7 +172,7 @@ class FeedTile extends StatelessWidget {
         'assets/heart_blue_icon.png' : 
         'assets/heart_icon.png', width: 24.0, height: 24.0,) ,
       onTap: () => _likeOrUnlikeCallback(model.entry.id),
-      onLongPress: () => Navigator.of(context).push(MaterialPageRoute(
+      onLongPress: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
         builder: (_) => ExtendedStatsPage(Future.value(model.entry.likedUsers)),
         settings: RouteSettings(name: 'Liked')
       )),

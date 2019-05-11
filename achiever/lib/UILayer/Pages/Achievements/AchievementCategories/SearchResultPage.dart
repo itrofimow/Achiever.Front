@@ -13,6 +13,7 @@ import 'package:achiever/UILayer/UIKit/User/UserTile.dart';
 import '../SelectedAchievement/SelectedAchievementPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'package:flutter/services.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 class SearchResultPage extends StatefulWidget {
 
@@ -116,7 +117,7 @@ class SearchResultPageState extends State<SearchResultPage> {
               CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage.imagePath}'),
               key: ValueKey(x.id),
             ),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
               builder: (_) => SelectedAchievementPage(x.id),
               settings: RouteSettings(name: 'selectedAchievement'))),
           ),

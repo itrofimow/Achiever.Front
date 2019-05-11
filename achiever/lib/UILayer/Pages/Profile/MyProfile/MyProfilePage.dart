@@ -2,34 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:achiever/BLLayer/Redux/AppState.dart';
-
-import 'package:achiever/UILayer/UIKit/Buttons/AchieverSecondaryButton.dart';
-import 'package:achiever/UILayer/UXKit/KeepAliveFutureBuilder.dart';
-import 'package:achiever/UILayer/Pages/Feed/FeedTile.dart';
 import 'EditProfilePage.dart';
-
-import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 import 'MyProfileViewModel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
 
 import 'package:achiever/BLLayer/Redux/Keys.dart';
-import 'package:quiver/strings.dart';
 
 import 'package:achiever/UILayer/UIKit/ScrollWithoutGlow.dart';
 import 'SettingsPage.dart';
 
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/User/User.dart';
-
-import 'package:achiever/BLLayer/Models/User/UserDto.dart';
 import '../ExtendedStatsPage.dart';
 
 import '../../PersonalFeed/PersonalFeedPage.dart';
 import 'dart:async';
-
-import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
 import '../ProfileBuilder.dart';
@@ -146,7 +136,7 @@ class MyProfilePageState extends State<MyProfilePage> {
           ),
         ),
       ),
-      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+      onTap: () => Keys.baseNavigatorKey.currentState.push(NoOpacityMaterialPageRoute(
           builder: (_) => EditProfilePage(user), settings: RouteSettings(
             name: 'editProfile'
           ))),
@@ -158,7 +148,7 @@ class MyProfilePageState extends State<MyProfilePage> {
         width: 36,
         child: Image.asset('assets/settings_icon.png', width: 36, height: 36),
       ),
-      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+      onTap: () => Keys.baseNavigatorKey.currentState.push(NoOpacityMaterialPageRoute(
         builder: (_) => SettingsPage()
       )),
     );
@@ -194,7 +184,7 @@ class MyProfilePageState extends State<MyProfilePage> {
             ),
           ),
         ),
-        onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+        onTap: () => Keys.baseNavigatorKey.currentState.push(NoOpacityMaterialPageRoute(
             builder: (_) => EditProfilePage(user), settings: RouteSettings(
               name: 'editProfile'
             ))),
@@ -217,7 +207,7 @@ class MyProfilePageState extends State<MyProfilePage> {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               child: ProfileBuilder.buildStatsBlock(context, viewModel.user.stats.followers, 'Подписчиков'),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
                 builder: (innerContext) => ExtendedStatsPage(Future.value(viewModel.followers)),
                 settings: RouteSettings(name: 'followers')
               )),
@@ -228,7 +218,7 @@ class MyProfilePageState extends State<MyProfilePage> {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               child: ProfileBuilder.buildStatsBlock(context, viewModel.user.stats.following, 'Подписок'),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
                 builder: (_) => ExtendedStatsPage(Future.value(viewModel.followings)),
                 settings: RouteSettings(name: 'followings')
               )),

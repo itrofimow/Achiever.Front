@@ -4,7 +4,7 @@ import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'AchievementCategoriesViewModel.dart';
 import 'package:achiever/BLLayer/Models/AchievementCategories/AchievementCategory.dart';
 import 'dart:math';
-import 'package:achiever/UILayer/UIKit/AchieverNavigationBar.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import '../SelectedCategory/SelectedCategoryPage.dart';
 import 'SearchResultPage.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
@@ -77,7 +77,7 @@ class AchievementCategoriesPage extends StatelessWidget {
         ),
       ),
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => SearchResultPage(), 
+        NoOpacityMaterialPageRoute(builder: (_) => SearchResultPage(), 
         settings: RouteSettings(name: 'searchResult'))),
     );
 
@@ -192,7 +192,7 @@ class AchievementCategoriesPage extends StatelessWidget {
             image
           ],
         ),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+        onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
           builder: (context) => SelectedCategoryPage(category.id),
           settings: RouteSettings(name: 'selectedCategory'))),
       )

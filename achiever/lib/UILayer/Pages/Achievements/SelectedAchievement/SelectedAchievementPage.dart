@@ -375,7 +375,7 @@ class SelectedAchievementPageState extends State<SelectedAchievementPage> {
           ),
         ),
       ),
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+      onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
         builder: (_) => EntryCreationPage(widget.achievementId),
         settings: RouteSettings(name: 'createEntry')
       )),

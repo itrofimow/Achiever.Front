@@ -14,19 +14,16 @@ class NoOpacityMaterialPageRoute extends MaterialPageRoute {
     if (settings.isInitialRoute)
       return child;
     
-    return child;
-    /*return SlideTransition(
-      position: new Tween<Offset>(
-        begin: const Offset(-1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );*/
+    return Container(
+      color: Colors.white,
+      child: super.buildTransitions(context, animation, secondaryAnimation, child),
+    );
   }
 
+  /*
   @override
   Color get barrierColor => Colors.white;
 
   @override
-  Duration get transitionDuration => const Duration();
+  Duration get transitionDuration => const Duration();*/
 }

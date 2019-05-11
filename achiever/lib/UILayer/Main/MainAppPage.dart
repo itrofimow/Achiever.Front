@@ -8,6 +8,7 @@ import 'MainPageNavigatorObserver.dart';
 
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 class MainAppPage extends StatelessWidget {
 
@@ -61,7 +62,7 @@ class MainAppPage extends StatelessWidget {
         observers: [MainPageNavigatorObserver(index, AppContainer.store)],
         initialRoute: route,
         onGenerateRoute: (settings) {
-          return MaterialPageRoute(
+          return NoOpacityMaterialPageRoute(
             builder: mainAppRoutes[settings.name],
             settings: RouteSettings(name: settings.name),
             //maintainState: 
