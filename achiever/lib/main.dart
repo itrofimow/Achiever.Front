@@ -113,7 +113,8 @@ class _AppState extends State<MyApp> {
           primarySwatch: Colors.grey,
           scaffoldBackgroundColor: Colors.white,
           pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.android: NoAnimationTransitionBuilder()
+            TargetPlatform.android: NoAnimationTransitionBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
           })
         ),
         //home: new MyHomePage(title: 'Flutter Demo Home Page'),
