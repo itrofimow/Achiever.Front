@@ -12,7 +12,7 @@ import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 class MainAppPage extends StatelessWidget {
 
-  MainAppPage() : super(key : UniqueKey());
+  MainAppPage() : super(key : GlobalKey());
 
   @override
   Widget build(BuildContext context) {

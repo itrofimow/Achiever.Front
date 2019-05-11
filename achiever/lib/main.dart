@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:achiever/routes.dart';
-import 'package:achiever/UILayer/Pages/DebugRoutingPage.dart';
 import 'package:flutter/services.dart';
 
 import 'package:redux/redux.dart';
@@ -10,20 +9,16 @@ import 'BLLayer/Redux/AppState.dart';
 import 'BLLayer/Redux/Store.dart';
 import 'BLLayer/Redux/Keys.dart';
 
-import 'BLLayer/Firebase/FirebaseInitializer.dart';
 import 'dart:io' show Platform;
 
 import 'AppContainer.dart';
 
-import 'package:achiever/UILayer/Pages/TestPage.dart';
 import 'package:achiever/UILayer/Pages/Entrance/WelcomePage.dart';
-import 'package:achiever/UILayer/Pages/Feed/FeedPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'DALayer/ApiClient.dart';
 import 'package:achiever/UILayer/Main/MainAppPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'UILayer/UIKit/ScrollWithoutGlow.dart';
+import 'package:achiever/UILayer/UIKit/NoAnimationTransitionBuilder.dart';
 
 Future<bool> _shouldGoToFeed(Store<AppState> store) async {
   final token = await AppContainer.sharedPrefsService.getToken();
@@ -116,7 +111,10 @@ class _AppState extends State<MyApp> {
           // counter didn't reset back to zero; the application is not restarted.
           fontFamily: Platform.isAndroid ? 'Lato' : 'SF',
           primarySwatch: Colors.grey,
-          scaffoldBackgroundColor: Colors.white
+          scaffoldBackgroundColor: Colors.white,
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: NoAnimationTransitionBuilder()
+          })
         ),
         //home: new MyHomePage(title: 'Flutter Demo Home Page'),
         navigatorKey: Keys.baseNavigatorKey,
