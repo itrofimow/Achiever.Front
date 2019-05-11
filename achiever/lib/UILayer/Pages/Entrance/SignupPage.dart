@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:achiever/BLLayer/Models/Login/Signup.dart';
-import 'package:achiever/BLLayer/Models/Login/Login.dart';
-import 'package:achiever/AppContainer.dart';
-import 'package:achiever/UILayer/UIKit/Buttons/AchieverButton.dart';
 import 'package:achiever/BLLayer/Services/AuthService.dart';
 import 'package:quiver/strings.dart';
+import 'package:achiever/UILayer/UIKit/AchieverCheckbox.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 
 class SignupPage extends StatefulWidget {
   final _authService = new AuthService();
@@ -28,6 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   String _lastTakenLogin = '';
 
   bool _autoValidate = false;
+  bool _policyAcepted = true;
 
   final _emailFocusNode = new FocusNode();
   final _password2FocusNode = new FocusNode();
@@ -56,7 +58,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void dispose() {
     _emailFocusNode.removeListener(_ensureButtonVisible);
-    _emailFocusNode.removeListener(_ensureEmailVisible);
+    _password2FocusNode.removeListener(_ensureEmailVisible);
     super.dispose();
   }
 
@@ -90,17 +92,12 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
 
-    final signupButton = new Container(
-			margin: EdgeInsets.only(top: 52.0),
-      child: AchieverButton(56, new Text('ЗАРЕГИСТРИРОВАТЬСЯ', style: TextStyle(
-					color: Colors.white,
-					fontSize: 18.0)), validate),
-		);
+    final signupButton = _buildButton(context);
 
     final credsForm = new Form(
 			key: formKey,
 			child: new Container(
-        margin: EdgeInsets.only(left: 20.0, right: 20.0),
+        margin: EdgeInsets.only(left: 16.0, right: 16.0),
 				//decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 1.0)),
 				child: new Column(
 					children: <Widget>[
@@ -163,44 +160,147 @@ class _SignupPageState extends State<SignupPage> {
                 onSaved: (val) => email = val,
               ),
             ),
-            new Container(
-              key: buttonKey,
-              child: !loginInProgress ? signupButton : 
-                new Container(
-                  margin: EdgeInsets.only(top: 20.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator()
-                  )
-                )
-            )
           ]
         )
       )
     );
 
+    final buttonContainer = Container(
+      key: buttonKey,
+      margin: EdgeInsets.only(top: 24, left: 16, right: 16),
+      child: !loginInProgress ? signupButton : 
+        new Container(
+          child: Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator()
+          )
+        )
+    );
+
     return new Scaffold(
+      appBar: _buildAppBar(context),
       body: new SingleChildScrollView(
         child: new Column(
           children: <Widget>[
             credsForm,
-            //new Expanded(child: new Container(),),
-            new Container(
-              width: 310.0,
-              margin: EdgeInsets.only(top: 22.0),
-              //decoration: new BoxDecoration(border: Border.all(color: Colors.black)),
-              child: new Text('Регистрируясь в Achiever вы соглашаетесь с правилами и условиями сервиса',
-                textAlign: TextAlign.center,
-                style: new TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w100,
-                  color: Color.fromARGB(255, 102, 102, 102)
-                ),
-              )
-            )
+            _buildPolicyCheckbox(context),
+            buttonContainer
           ],
         )
       ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context) {
+    final button = Container(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          //color: Color.fromARGB(255, 242, 242, 242)
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(0, 202, 255, 1),
+              Color.fromRGBO(0, 142, 255, 1)
+            ]
+          )
+        ),
+        height: 56,
+        width: MediaQuery.of(context).size.width - 16 * 2,
+        child: Center(
+          widthFactor: 1,
+          child: Container(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: Text('Зарегистрироваться', style: TextStyle(
+              fontSize: 13,
+              letterSpacing: 0.22,
+              fontWeight: FontWeight.w500,
+              color: Colors.white
+            )),
+          ),
+        ),
+      ),
+    );
+
+    if (_policyAcepted) {
+      return GestureDetector(
+        child: button,
+        onTap: validate,
+      );
+    }
+    
+    return Opacity(
+      opacity: 0.2,
+      child: button,
+    );
+  }
+
+  Widget _buildPolicyCheckbox(BuildContext context) {
+    final checkbox = AchieverCheckbox(
+      value: _policyAcepted,
+      onChanged: (val) {
+        setState((){
+          _policyAcepted = val;
+        }); 
+      },
+    );
+
+    final text = RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: 'Я принимаю ', style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+            letterSpacing: 0,
+            color: Color.fromRGBO(102, 102, 102, 1)
+          )),
+          TextSpan(text: 'политику конфиденциальности', style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+            letterSpacing: 0,
+            color: Color.fromRGBO(64, 123, 224, 1)
+          ), recognizer: TapGestureRecognizer()..onTap = () {
+            Navigator.of(context).push(NoOpacityMaterialPageRoute(
+              builder: (_) => _buildWebView(context),
+              settings: RouteSettings(name: 'policy')
+            ));
+          })
+        ]
+      )
+    );
+
+    return Container(
+      margin: EdgeInsets.only(top: 56, left: 16, right: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          checkbox,
+          Container(
+            margin: EdgeInsets.only(left: 12),
+            child: text,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWebView(BuildContext context) {
+    return WebviewScaffold(
+      url: 'https://www.notion.so/furycateur/deb541ab271a4e70bcabe86dc4140bc2',
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      elevation: 1,
+      title: Text('Регистрация', style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 21,
+        letterSpacing: 0.34,
+        color: Color.fromRGBO(51, 51, 51, 1)
+      )),
     );
   }
 }
