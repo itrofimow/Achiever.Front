@@ -47,7 +47,10 @@ class MainAppViewModel {
       userProfileImage: store.state.userState.user.profileImagePath,
 
       processTap: (index) {
-        if (index == state.currentNavigationIndex) return; 
+        if (index == state.currentNavigationIndex) {
+          Keys.mainPageNavigators[index].currentState.popUntil((r) => r.isFirst);
+          return;
+        }
 
         if (index == NavigationIndexes.feedNavigationIndex) 
           store.dispatch(GoToFeedAction());
