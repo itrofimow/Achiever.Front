@@ -21,7 +21,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:redux/redux.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
 
 import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
