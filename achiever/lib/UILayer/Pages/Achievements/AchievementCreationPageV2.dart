@@ -75,7 +75,7 @@ class _AchievementCreationPageV2State extends State<AchievementCreationPageV2> {
       ? Container(
         height: 150,
         color: Colors.blue,)
-      : AchieverAchievement(achievement, 123, null, null,
+      : AchieverAchievement(achievement,
         key: UniqueKey(), useFileImages: true,);
 
     return Container(

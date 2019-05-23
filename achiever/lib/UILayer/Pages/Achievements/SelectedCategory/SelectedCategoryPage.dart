@@ -149,12 +149,7 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
         return Container(
           margin: EdgeInsets.only(top: 20),
           child: GestureDetector(
-            child: AchieverAchievement(x, 
-              MediaQuery.of(context).size.width - 16 * 2,
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.backgroundImage?.imagePath}'),
-              CachedNetworkImageProvider('${ApiClient.staticUrl}/${x.frontImage?.imagePath}'),
-              key: ValueKey(x.id),
-            ),
+            child: AchieverAchievement(x, key: ValueKey(x.id),),
             onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
               builder: (_) => SelectedAchievementPage(x.id), 
               settings: RouteSettings(name: 'selectedAchievement'))),

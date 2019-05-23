@@ -21,6 +21,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:redux/redux.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
+
+import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -62,10 +66,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future _selectPhoto() async {
-    final image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final croppedImage = await PhotoSelector.selectPhoto(context, allowCamera: true, applyCropper: true);
+
+    //final test = await PhotoSelector.selectPhoto();
+
+    /*final image = await ImagePicker.pickImage(source: ImageSource.camera);
     if (image == null) return;
 
-    final croppedImage = await ImageCropper.cropImage(sourcePath: image.path);
+    final croppedImage = await ImageCropper.cropImage(sourcePath: image.path);*/
 
     if (mounted) {
       setState(() {

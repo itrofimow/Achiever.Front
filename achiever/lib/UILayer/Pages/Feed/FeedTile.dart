@@ -95,11 +95,7 @@ class FeedTile extends StatelessWidget {
     final achievementBox = Container(
       margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
       child: GestureDetector(
-        child: AchieverAchievement(model.entry.achievement,
-          MediaQuery.of(context).size.width - 16 * 2,
-          CachedNetworkImageProvider(ApiClient.staticUrl + '/' + model.entry.achievement.backgroundImage.imagePath),
-          CachedNetworkImageProvider(ApiClient.staticUrl + '/' + model.entry.achievement.frontImage.imagePath)
-        ),
+        child: AchieverAchievement(model.entry.achievement),
         onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
           builder: (_) => SelectedAchievementPage(model.entry.achievementId),
           settings: RouteSettings(name: 'selectedAchievement')

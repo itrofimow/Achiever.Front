@@ -6,7 +6,6 @@ import 'package:achiever/UILayer/Pages/Entrance/SignupPage.dart';
 import 'package:achiever/UILayer/Pages/Profile/MyProfile/MyProfilePage.dart';
 import 'package:achiever/UILayer/Pages/DebugRoutingPage.dart';
 import 'package:achiever/UILayer/Pages/Achievements/AllAchievementsPage.dart';
-import 'package:achiever/UILayer/Pages/Achievements/AchievementCreationPage.dart';
 import 'package:achiever/UILayer/Pages/Notifications/NotificationsPage.dart';
 import 'package:achiever/UILayer/Pages/Achievements/AchievementCategories/AchievementCategoriesPage.dart';
 import 'package:achiever/UILayer/Main/MainAppPage.dart';
@@ -19,7 +18,6 @@ final routes = {
   '/myProfile' : (BuildContext context) => new MyProfilePage(),
   '/routes': (BuildContext context) => new DebugRoutingPage(),
   '/allAchievements': (BuildContext context) => new AllAchievementsPage(),
-  '/createAchievement': (BuildContext context) => new AchievementCreationPage(),
   '/notifications': (BuildContext context) => new NotificationsPage(),
   '/achievementCategories': (BuildContext context) => new AchievementCategoriesPage(),
   '/main': (BuildContext context) => new MainAppPage()

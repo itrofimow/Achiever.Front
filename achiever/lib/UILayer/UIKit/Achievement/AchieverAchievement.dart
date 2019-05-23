@@ -12,14 +12,9 @@ part 'LazyAchievementState.dart';
 
 class AchieverAchievement extends StatefulWidget {
   final Achievement model;
-  final double width;
   bool useFileImages;
   
-  final ImageProvider<dynamic> backgroundImage;
-  final ImageProvider<dynamic> foregroundImage;
-  
-  AchieverAchievement(this.model, this.width,
-    this.backgroundImage, this.foregroundImage, {Key key, bool useFileImages}) : super(key: key){
+  AchieverAchievement(this.model, {Key key, bool useFileImages}) : super(key: key){
       if (useFileImages == null) this.useFileImages = false;
       else this.useFileImages = useFileImages;
     }

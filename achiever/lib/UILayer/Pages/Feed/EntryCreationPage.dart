@@ -116,10 +116,7 @@ class _EntryCreationPageState extends State<EntryCreationPage> {
     final achievementBox = new Container(
       //decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 1.0)),
       margin: EdgeInsets.only(top: 28.0, left: 16.0, right: 16.0),
-      child: AchieverAchievement(achievement,
-        MediaQuery.of(context).size.width - 16 * 2,
-        CachedNetworkImageProvider('${ApiClient.staticUrl}/${achievement.backgroundImage.imagePath}'),
-        CachedNetworkImageProvider('${ApiClient.staticUrl}/${achievement.frontImage.imagePath}')),
+      child: AchieverAchievement(achievement),
     );
 
     final List<Widget> photosList = _imagesList.map((file){
