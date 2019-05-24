@@ -36,32 +36,34 @@ class PhotoSelector {
       color: Color.fromRGBO(52, 52, 52, 1)
     );
 
-    return Container(
-      child: Wrap(
-        children: [
-          ListTile(
-            leading: Image.asset('assets/photo_selector_photo.png', width: 36, height: 36,),
-            title: Text('Сделать фотографию', style: style),
-            onTap: () async {
-              final image = await _selectPhotoInner(ImageSource.camera, applyCropper);
-              Navigator.pop(context, image);
-            },
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16),
-            height: 1,
-            color: Color.fromRGBO(0, 0, 0, 0.2),
-          ),
-          ListTile(
-            leading: Image.asset('assets/photo_selector_gallery.png', width: 36, height: 36,),
-            title: Text('Выбрать из галереи', style: style),
-            onTap: () async {
-              final image = await _selectPhotoInner(ImageSource.gallery, applyCropper);
-              Navigator.pop(context, image);
-            },
-          )
-        ]
-      ),
+    return SafeArea(
+      child: Container(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: Image.asset('assets/photo_selector_photo.png', width: 36, height: 36,),
+              title: Text('Сделать фотографию', style: style),
+              onTap: () async {
+                final image = await _selectPhotoInner(ImageSource.camera, applyCropper);
+                Navigator.pop(context, image);
+              },
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 16, right: 16),
+              height: 1,
+              color: Color.fromRGBO(0, 0, 0, 0.2),
+            ),
+            ListTile(
+              leading: Image.asset('assets/photo_selector_gallery.png', width: 36, height: 36,),
+              title: Text('Выбрать из галереи', style: style),
+              onTap: () async {
+                final image = await _selectPhotoInner(ImageSource.gallery, applyCropper);
+                Navigator.pop(context, image);
+              },
+            )
+          ]
+        ),
+      )
     );
   }
 
