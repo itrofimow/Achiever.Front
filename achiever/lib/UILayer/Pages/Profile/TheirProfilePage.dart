@@ -13,6 +13,7 @@ import 'ExtendedStatsPage.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
 import 'dart:async';
+import 'package:achiever/BLLayer/Redux/Keys.dart';
 
 class TheirProfilePage extends StatefulWidget {
   final String userId;
@@ -119,14 +120,27 @@ class _TheirProfilePageState extends State<TheirProfilePage> {
   }
 
   Widget _buildHeader(BuildContext context, User user, Store<AppState> store) {
-    final profileImage = new Container(
-      height: 56.0,
-      width: 56.0,
-      child: new ClipRRect(
-        borderRadius: BorderRadius.circular(50.0),
-        child: new CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${user.profileImagePath}',
-          width: 36.0, height: 36.0,)
-      ),
+    final profileImage = GestureDetector(
+      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+        builder: (bc) => HeroPhotoViewWrapper(
+          imageProvider: CachedNetworkImageProvider('${ApiClient.staticUrl}/${user.profileImagePath}'),
+          heroTag: 'their_profile_image_tag',
+          //minScale: 0.2,
+          maxScale: 2.0,
+        ),
+      )),
+      child: Hero(
+        tag: 'their_profile_image_tag',
+        child: Container(
+          height: 56.0,
+          width: 56.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            child: CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${user.profileImagePath}',
+              width: 36.0, height: 36.0,)
+          ),
+        )
+      )
     );
 
     final subUnsubButton = store.state.userState.followings.contains(model.id)

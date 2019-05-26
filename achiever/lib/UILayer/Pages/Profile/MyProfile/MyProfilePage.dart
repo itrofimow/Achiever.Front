@@ -89,14 +89,27 @@ class MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _buildHeader(BuildContext context, User user) {
-    final profileImage = new Container(
-      height: 56.0,
-      width: 56.0,
-      child: new ClipRRect(
-        borderRadius: BorderRadius.circular(50.0),
-        child: new CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${user.profileImagePath}',
-          width: 36.0, height: 36.0,)
-      ),
+    final profileImage = GestureDetector(
+      onTap: () => Keys.baseNavigatorKey.currentState.push(MaterialPageRoute(
+        builder: (bc) => HeroPhotoViewWrapper(
+          imageProvider: CachedNetworkImageProvider('${ApiClient.staticUrl}/${user.profileImagePath}'),
+          heroTag: 'my_profile_image_tag',
+          //minScale: 0.2,
+          maxScale: 2.0,
+        ),
+      )),
+      child: Hero(
+        tag: 'my_profile_image_tag',
+        child: Container(
+          height: 56.0,
+          width: 56.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            child: CachedNetworkImage(imageUrl: '${ApiClient.staticUrl}/${user.profileImagePath}',
+              width: 36.0, height: 36.0,)
+          ),
+        )
+      )
     );
 
     return Container(
