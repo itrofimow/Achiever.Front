@@ -76,7 +76,9 @@ class _PersonalFeedPageState extends State<PersonalFeedPage> {
 
     final listChildren = List<Widget>();
     viewModel.entries.forEach((x){
-      listChildren.add(FeedTile(x, viewModel.isAchievementViewModel, viewModel.likeOrUnlikeCallback, _navigateFunc, viewModel.userId));
+      listChildren.add(
+        FeedTile(x, viewModel.isAchievementViewModel, viewModel.likeOrUnlikeCallback, _navigateFunc, viewModel.userId,
+          allowAchievementNavigation: !viewModel.isAchievementViewModel,));
     });
 
     if (viewModel.isLocked)

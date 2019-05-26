@@ -87,6 +87,131 @@ class MainAppViewModel {
 
     if (currentRoute == 'editProfile') return null;
 
+    if (currentRoute == 'feed') {
+      return AppBar(
+        centerTitle: true,
+        title: Image.asset('assets/achiever_logo.png', 
+              color: Color.fromRGBO(51, 51, 51, 1), 
+              colorBlendMode: BlendMode.srcIn,
+              width: 28,
+              height: 26,),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      );
+    }
+
+    if (currentRoute == 'profile') {
+      return AppBar(
+        centerTitle: false,
+        title: Text('Мой профиль', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+      );
+    }
+
+    if (currentRoute == 'followers') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Подписчики', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'followings') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Подписки', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'Liked') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Понравилось', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'feedEntry') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Запись', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'search' || currentRoute == 'selectedCategory') {
+      return AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'createEntry') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Новый пост', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
+    if (currentRoute == 'searchResult') {
+      return AppBar(
+        centerTitle: true,
+        title: Text('Поиск', style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+          letterSpacing: 0.3,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: true,
+      );
+    }
+
     return AppBar(
       centerTitle: true,
       title: Text(currentRoute), 

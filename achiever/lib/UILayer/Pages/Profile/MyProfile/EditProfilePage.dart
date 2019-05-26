@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:achiever/BLLayer/Models/User/User.dart';
-import 'package:achiever/UILayer/UIKit/Images/AchieverProfileImage.dart';
 import 'package:achiever/DALayer/ApiClient.dart';
-import 'package:achiever/UILayer/UIKit/Buttons/AchieverButton.dart';
 
-import 'MyProfileViewModel.dart';
 import 'package:achiever/BLLayer/Redux/AppState.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
 
-import 'package:achiever/BLLayer/Redux/Keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import 'package:flutter_redux/flutter_redux.dart';
-
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-
-import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'package:redux/redux.dart';
-import 'package:achiever/BLLayer/Redux/User/UserActions.dart';
-import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
-
 import 'package:achiever/UILayer/UXKit/PhotoSelector.dart';
 
 import 'dart:io';
@@ -109,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: _buildAppBar(context, store),
       body: Container(
-        margin: EdgeInsets.only(left: 16, right: 16),
+        margin: EdgeInsets.only(left: 16, right: 16, top: 24),
         child: ListView(
           children: <Widget>[
             _buildImageBlock(context),
@@ -161,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ]
       ),
-      elevation: 0,
+      elevation: 1,
       automaticallyImplyLeading: false,
     );
   }

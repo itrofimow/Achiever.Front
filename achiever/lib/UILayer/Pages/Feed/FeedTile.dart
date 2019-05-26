@@ -25,10 +25,11 @@ class FeedTile extends StatelessWidget {
   final Function(String) _likeOrUnlikeCallback;
   final Function(BuildContext, FeedEntryResponse) _navigateToFeedEntry;
   final String userId;
+  bool allowAchievementNavigation;
 
 	FeedTile(this.model, this._allowNavigation, 
     this._likeOrUnlikeCallback, this._navigateToFeedEntry,
-    this.userId);
+    this.userId, {this.allowAchievementNavigation = true});
 
   void _goToProfile(BuildContext context) {
     if (!_allowNavigation) return;
@@ -96,11 +97,13 @@ class FeedTile extends StatelessWidget {
       margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
       child: GestureDetector(
         child: AchieverAchievement(model.entry.achievement),
-        onTap: () => Navigator.of(context).push(NoOpacityMaterialPageRoute(
-          builder: (_) => SelectedAchievementPage(model.entry.achievementId),
-          settings: RouteSettings(name: 'selectedAchievement')
-        )),
-      )
+        onTap: () => allowAchievementNavigation 
+          ? Navigator.of(context).push(NoOpacityMaterialPageRoute(
+            builder: (_) => SelectedAchievementPage(model.entry.achievementId),
+            settings: RouteSettings(name: 'selectedAchievement')
+          ))
+          : {}
+        ),
     );
 
     var photosBox = new Container();

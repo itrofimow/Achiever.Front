@@ -4,8 +4,6 @@ import 'package:achiever/BLLayer/Redux/AppState.dart';
 import 'AchievementCategoriesViewModel.dart';
 import 'package:achiever/BLLayer/Models/Achievement/Achievement.dart';
 import 'package:achiever/UILayer/UIKit/Achievement/AchieverAchievement.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:achiever/DALayer/ApiClient.dart';
 import 'package:achiever/AppContainer.dart';
 import 'package:achiever/BLLayer/Models/Search/SearchRequest.dart';
 import 'package:achiever/BLLayer/Models/User/UserDto.dart';
@@ -23,7 +21,6 @@ class SearchResultPage extends StatefulWidget {
 
 class SearchResultPageState extends State<SearchResultPage> {
   final TextEditingController _controller = TextEditingController();
-  bool focusRequested = false;
 
   List<Achievement> _achievements = List<Achievement>();
   List<UserDto> _users = List<UserDto>();
@@ -33,17 +30,6 @@ class SearchResultPageState extends State<SearchResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!focusRequested) {
-      WidgetsBinding.instance.addPostFrameCallback((_){
-        if (mounted) {
-          FocusScope.of(context).requestFocus(_searchFocusNode);
-          SystemChannels.textInput.invokeMethod('TextInput.show');
-        }
-
-        focusRequested = true;
-      });
-    }
-
     return StoreConnector<AppState, AchievementCategoriesViewModel>(
       converter: (store) => AchievementCategoriesViewModel.fromStore(store),
       builder: (context, viewModel) => _buildLayout(context, viewModel),

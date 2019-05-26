@@ -67,6 +67,7 @@ class MyProfilePageState extends State<MyProfilePage> {
           return viewModel.resetPersonalFeed();
         },
         child: ListView(
+          padding: EdgeInsets.zero,
           controller: _scrollController,
           children: <Widget>[
             _buildFitted(context, _buildHeader(context, viewModel.user)),

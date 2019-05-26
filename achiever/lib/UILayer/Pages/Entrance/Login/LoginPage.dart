@@ -19,6 +19,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 1,
+        title: Text('Вход', style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 21,
+          letterSpacing: 0.34,
+          color: Color.fromRGBO(51, 51, 51, 1)
+        )),
+      ),
       body: StoreConnector<AppState, LoginViewModel>(
         onInit: (store) {
           store.dispatch(ClearErrorsAction());

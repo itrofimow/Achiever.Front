@@ -11,9 +11,10 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         title: Text('Настройки'), 
-         backgroundColor: Colors.white,
-        elevation: 0,
+        centerTitle: true,
+        title: Text('Настройки'), 
+        backgroundColor: Colors.white,
+        elevation: 1,
       ),
       body: SingleChildScrollView(
         child: Column(

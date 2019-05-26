@@ -58,7 +58,9 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
               Container(height: 1, color: Color.fromARGB(255, 242, 242, 242),),
                 _topNavState == _TopNavigationState.all 
                 ? _buildAllAchievementsList(context, viewModel)
-                : _buildMyAchievementsList(context, viewModel)
+                : _topNavState == _TopNavigationState.my
+                  ? _buildMyAchievementsList(context, viewModel)
+                  : _buildNotYetAchievementsList(context, viewModel)
             ]
           ),
         ),
@@ -161,6 +163,41 @@ class SelectedCategoryPageState extends State<SelectedCategoryPage> {
 
   Widget _buildAllAchievementsList(BuildContext context, SelectedCategoryViewModel viewModel) {
     return Expanded(child: _buildFitted(context, _buildList(context, viewModel.allAchievements)));
+  }
+
+  Widget _buildNotYetAchievementsList(BuildContext context, SelectedCategoryViewModel viewModel) {
+    final list = viewModel.allAchievements.where(
+      (x) => !viewModel.myAchievements.any((y) => y.id == x.id)).toList();
+
+    if (list.length > 0)
+      return Expanded(child: _buildFitted(context, _buildList(context, list)));
+
+    final content = Container(
+      margin: EdgeInsets.only(top: 53),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 130,
+            height: 140,
+            //color: Colors.black,
+            child: Image.asset('assets/achiever_logo.png', 
+              color: Color.fromRGBO(51, 51, 51, 1), 
+              colorBlendMode: BlendMode.srcIn,),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 25),
+            child: Text('В этой категории все достижения уже\nполучены. Возвращайтесь через\nнекоторое время.', style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 17,
+              color: Color.fromRGBO(51, 51, 51, 1),
+              letterSpacing: -0.41
+            ), textAlign: TextAlign.center,),
+          )
+        ]
+      )
+    );
+
+    return _buildFitted(context, content);
   }
 
   Widget _buildMyAchievementsList(BuildContext context, SelectedCategoryViewModel viewModel) {
