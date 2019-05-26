@@ -6,6 +6,7 @@ import 'package:achiever/UILayer/UIKit/AchieverCheckbox.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:achiever/UILayer/UIKit/NoOpacityMaterialPageRoute.dart';
+import 'package:achiever/UILayer/UXKit/PolicyBuilder.dart';
 
 class SignupPage extends StatefulWidget {
   final _authService = new AuthService();
@@ -261,7 +262,7 @@ class _SignupPageState extends State<SignupPage> {
             color: Color.fromRGBO(64, 123, 224, 1)
           ), recognizer: TapGestureRecognizer()..onTap = () {
             Navigator.of(context).push(NoOpacityMaterialPageRoute(
-              builder: (_) => _buildWebView(context),
+              builder: (_) => PolicyBuilder.buildWebView(context),
               settings: RouteSettings(name: 'policy')
             ));
           })
@@ -281,16 +282,6 @@ class _SignupPageState extends State<SignupPage> {
           )
         ],
       ),
-    );
-  }
-
-  Widget _buildWebView(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-      ),
-      url: 'https://www.notion.so/furycateur/deb541ab271a4e70bcabe86dc4140bc2',
     );
   }
 

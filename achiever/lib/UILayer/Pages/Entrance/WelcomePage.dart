@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:achiever/UILayer/UIKit/Buttons/AchieverButton.dart';
 
 class WelcomePage extends StatelessWidget {
   
